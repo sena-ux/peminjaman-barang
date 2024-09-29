@@ -15,23 +15,36 @@ class AuthController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData  = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'alamat' => 'required|string|max:255',
-            'nisn' => 'required|numeric|unique:users,nisn',
-            'nis' => 'required|numeric',
-            'kelas' => 'required|string|max:10',
-            'telp' => 'required|numeric',
-        ]);
+        dd($request->all());
+        if($request->post('role') == 'gurpeg'){
+            $validatedData  = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'username' => 'required|string|min:5',
+                'password' => 'required|string|min:8|confirmed',
+                'nip' => 'required|numeric',
+                'no_hp' => 'required|numeric',
+            ]);
+            if ($validatedData->fails()) {
+                return redirect()->back()->withErrors($validatedData)->withInput();
+            }
+    
+            User::create($request->all());
 
-        if ($validatedData->fails()) {
-            return redirect()->back()->withErrors($validatedData)->withInput();
+            return redirect()->route('create.peminjaman')->with('success', 'Registration successful!');
+
+        }else if ($request->post('role') == 'siswa'){
+            $validatedData  = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email',
+                'username' => 'required|string|min:5',
+                'password' => 'required|string|min:8|confirmed',
+                'nisn' => 'required|numeric|unique:users,nisn',
+                'nis' => 'required|numeric',
+                'kelas' => 'required|string|max:10',
+                'no_hp' => 'required|numeric',
+            ]);
         }
 
-        User::create($request->all());
-
-        return redirect()->route('create.peminjaman')->with('success', 'Registration successful!');
     }
 }

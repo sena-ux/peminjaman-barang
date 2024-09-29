@@ -57,7 +57,7 @@ class PeminjamanController extends Controller
 
         Peminjaman::create($data);
 
-        return redirect()->route('home')->with('success', 'Peminjaman berhasil di simpan successful!');
+        return redirect()->route('peminjaman.barang')->with('success', 'Peminjaman berhasil di simpan successful!');
     }
 
     public function pengembalian($token, Request $request)
