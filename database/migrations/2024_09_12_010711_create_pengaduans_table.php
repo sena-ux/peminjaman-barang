@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('pengaduans', function (Blueprint $table) {
             $table->id('id_pengaduan');
-            $table->unsignedBigInteger('id_barang');
-            $table->unsignedBigInteger('id_pelapor')->nullable();
+            $table->string('nama_barang');
+            $table->unsignedBigInteger('id_tanggapan')->nullable();
+            $table->unsignedBigInteger('id_pelapor');
             $table->date('tanggal_pengaduan');
-            $table->enum('status_pengaduan', ['Baru', 'Sedang Diproses', 'Selesai']);
-            $table->text('deskripsi');
+            $table->enum('status_pengaduan', ['Pending', 'Error','Baru', 'Validasi','Dalam Pengerjaan', 'Sedang Diproses', 'Selesai']);
+            $table->text('title');
+            $table->text('message');
             $table->string('foto_kerusakan')->nullable();
-            $table->foreign('id_barang')->references('id_barang')->on('barangs');
-            $table->foreign('id_pelapor')->references('id_pelapor')->on('pelapors');
             $table->timestamps();
         });
     }

@@ -1,0 +1,150 @@
+#navbarMobile {
+    display: none;
+}
+
+#iconMobile {
+    display: none;
+}
+
+.newmb {
+    display: none;
+}
+
+#btn-new {
+    background-color: rgb(0, 81, 255);
+    border: none;
+}
+
+#btn-new::after {
+    content: " New";
+}
+
+/* @media (max-width: 800px) {
+    .content-wrapper {
+        margin-bottom: 100px;
+    }
+
+    #navbarDekstop {
+        display: none;
+    }
+
+    #navbarDekstop {
+        display: none;
+    }
+
+    .hp {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    #navbarMobile {
+        position: fixed;
+        bottom: 0;
+        box-sizing: border-box;
+        width: 100%;
+        z-index: 50;
+        display: flex;
+
+        #collapseGroup {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 55px;
+
+            .subnemuCollapse {
+
+                .card-body {
+                    overflow: hidden;
+                    width: 300px;
+                }
+            }
+        }
+
+        .sidebar-hp {
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+
+            li {
+                list-style: none;
+            }
+
+
+        }
+    }
+
+    footer {
+        display: none;
+    }
+
+    .nav-treeview {
+        width: 100%;
+
+        .nav-item {
+            width: 100%;
+            background-color: aqua;
+        }
+    }
+
+    .activeMobile {
+        background-color: rgb(0, 110, 255);
+    }
+
+    .search,
+    .notifikasi,
+    .message,
+    .max-min {
+        display: none;
+    }
+
+    #iconMobile {
+        display: block;
+        padding-left: 1em;
+
+        img {
+            width: 30px;
+        }
+    }
+
+    .newdt {
+        display: none;
+    }
+
+    .newmb {
+        display: block;
+        position: fixed;
+        bottom: 80px;
+        right: 25px;
+        z-index: 9;
+
+        i {
+            font-size: 40;
+        }
+    }
+
+    #btn-new {
+        position: fixed;
+        bottom: 80px;
+        right: 25px;
+        background: none;
+        border: none;
+        font-size: large;
+
+        i {
+            font-size: 30px;
+            color: aqua;
+        }
+    }
+
+    #btn-new::after {
+        content: "";
+    }
+
+} */

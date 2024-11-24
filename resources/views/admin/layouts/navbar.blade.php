@@ -1,52 +1,150 @@
-<nav class="navbar" id="navbar">
-    <ul>
-        <li>
-            <a href="" class="title">
-                <span>@yield('nameApk', 'SAPA')</span>
-            </a>
+<nav class="main-header navbar navbar-expand navbar-dark bg-black">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item" id="navbarDekstop">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
-        <li>
-            <a onclick=subMenuNavbar(this) class="dropdown-btn-navbar">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
-                    fill="#5f6368">
-                    <path
-                        d="M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z" />
-                </svg>
-                <span>User</span>
+    </ul>
+    
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto hp">
+        <li class="nav-item" id="iconMobile">
+            <img src="{{ asset('sman2amlapura.ico') }}" alt="Logo Aplikasi Sarpras" class="brand-image img-circle elevation-3">
+        </li>
+        {{-- <!-- Navbar Search -->
+        <li class="nav-item search">
+            <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                <i class="fas fa-search"></i>
             </a>
-            <ul class="sub-menu-navbar">
-                <div>
-                    <li>
-                        <a href="">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                width="24px" fill="#5f6368">
-                                <path
-                                    d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z" />
-                            </svg>
-                            <span>Setting</span>
+            <div class="navbar-search-block">
+                <form class="form-inline">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                            aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </li>
+
+        <!-- Messages Dropdown Menu -->
+        <li class="nav-item dropdown message">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="far fa-comments"></i>
+                <span class="badge badge-danger navbar-badge">3</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <a href="#" class="dropdown-item">
+                    <!-- Message Start -->
+                    <div class="media">
+                        <img src="{{ asset('admin_lte') }}/dist/img/people.png" alt="User Avatar"
+                            class="img-size-50 mr-3 img-circle">
+                        <div class="media-body">
+                            <h3 class="dropdown-item-title">
+                                Brad Diesel
+                                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                            </h3>
+                            <p class="text-sm">Call me whenever you can...</p>
+                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                        </div>
+                    </div>
+                    <!-- Message End -->
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                    <!-- Message Start -->
+                    <div class="media">
+                        <img src="{{ asset('admin_lte') }}/dist/img/people.png" alt="User Avatar"
+                            class="img-size-50 img-circle mr-3">
+                        <div class="media-body">
+                            <h3 class="dropdown-item-title">
+                                John Pierce
+                                <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                            </h3>
+                            <p class="text-sm">I got your message bro</p>
+                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                        </div>
+                    </div>
+                    <!-- Message End -->
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                    <!-- Message Start -->
+                    <div class="media">
+                        <img src="{{ asset('admin_lte') }}/dist/img/people.png" alt="User Avatar"
+                            class="img-size-50 img-circle mr-3">
+                        <div class="media-body">
+                            <h3 class="dropdown-item-title">
+                                Nora Silvester
+                                <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                            </h3>
+                            <p class="text-sm">The subject goes here</p>
+                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                        </div>
+                    </div>
+                    <!-- Message End -->
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+            </div>
+        </li>
+        <!-- Notifications Dropdown Menu -->
+        <li class="nav-item dropdown notifikasi">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="far fa-bell"></i>
+                <span class="badge badge-warning navbar-badge">15</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <span class="dropdown-item dropdown-header">15 Notifications</span>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-envelope mr-2"></i> 4 new messages
+                    <span class="float-right text-muted text-sm">3 mins</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-users mr-2"></i> 8 friend requests
+                    <span class="float-right text-muted text-sm">12 hours</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item">
+                    <i class="fas fa-file mr-2"></i> 3 new reports
+                    <span class="float-right text-muted text-sm">2 days</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+            </div>
+        </li> --}}
+        {{-- <li class="nav-item max-min">
+            <a class="nav-link" id="buttonFullScreen" data-widget="fullscreen" href="#" role="button">
+                <i class="fas fa-expand-arrows-alt"></i>
+            </a>
+        </li> --}}
+
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="far fa-user"></i><span class="m-2">{{Str::ucfirst(strtolower(Auth::user()->username))}}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> <span
+                            class="ml-2">Setting</span></a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-address-card"></i><span
+                            class="ml-2">Profile</span></a></li>
+                <li>
+                    <form id="logout-form" action="{{ route('logout') }}" method="post">
+                        @csrf
+                        <a class="dropdown-item" href="#" id="logout-admin"><i class="fas fa-sign-out-alt"></i>
+                            <span class="ml-2">Logout</span>
                         </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                width="24px" fill="#5f6368">
-                                <path
-                                    d="M400-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM80-160v-112q0-33 17-62t47-44q51-26 115-44t141-18h14q6 0 12 2-8 18-13.5 37.5T404-360h-4q-71 0-127.5 18T180-306q-9 5-14.5 14t-5.5 20v32h252q6 21 16 41.5t22 38.5H80Zm560 40-12-60q-12-5-22.5-10.5T584-204l-58 18-40-68 46-40q-2-14-2-26t2-26l-46-40 40-68 58 18q11-8 21.5-13.5T628-460l12-60h80l12 60q12 5 22.5 11t21.5 15l58-20 40 70-46 40q2 12 2 25t-2 25l46 40-40 68-58-18q-11 8-21.5 13.5T732-180l-12 60h-80Zm40-120q33 0 56.5-23.5T760-320q0-33-23.5-56.5T680-400q-33 0-56.5 23.5T600-320q0 33 23.5 56.5T680-240ZM400-560q33 0 56.5-23.5T480-640q0-33-23.5-56.5T400-720q-33 0-56.5 23.5T320-640q0 33 23.5 56.5T400-560Zm0-80Zm12 400Z" />
-                            </svg>
-                            <span>Profile</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960"
-                                width="24px" fill="#5f6368">
-                                <path
-                                    d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
-                            </svg>
-                            <span>Logout</span>
-                        </a>
-                    </li>
-                </div>
+                    </form>
+                </li>
             </ul>
         </li>
     </ul>

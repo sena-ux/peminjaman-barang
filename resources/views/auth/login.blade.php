@@ -1,85 +1,161 @@
-@extends('layouts/index')
-@section('title', 'Login')
-@section('content')
-<div id="content" class="content">
-    <div class="container mb-5" style="margin-top: 13%">
-        <h2 class="mb-4">Register</h2>
-        <form id="register" style="border:2px black solid; padding:10px; border-radius:10px;" action="" method="post">
-            @csrf
-            <div class="mb-3">
-                <label for="name" class="form-label">Nama</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" value="{{ old('name') }}">
-                @error('name')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}">
-                @error('email')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="alamat" class="form-label">Alamat</label>
-                <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Enter your alamat" value="{{ old('alamat') }}">
-                @error('alamat')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="nisn" class="form-label">NISN</label>
-                <input type="text" class="form-control" id="nisn" name="nisn" placeholder="Enter your nisn" value="{{ old('nisn') }}">
-                @error('nisn')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="nis" class="form-label">NIS</label>
-                <input type="text" class="form-control" id="nis" name="nis" placeholder="Enter your nis" value="{{ old('nis') }}">
-                @error('nis')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="kelas" class="form-label">Kelas</label>
-                <input type="text" class="form-control" id="kelas" name="kelas" placeholder="Enter your kelas" value="{{ old('kelas') }}">
-                @error('kelas')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="telp" class="form-label">No HP</label>
-                <input type="text" class="form-control" id="telp" name="telp" placeholder="Enter your telp" value="{{ old('telp') }}">
-                @error('telp')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
-                @error('password')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="confirm-password" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control" id="confirm-password" name="password_confirmation" placeholder="Confirm your password">
-                @error('password_confirmation')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
-            </div>
-            <div class="d-flex justify-content-between">
-                <button type="reset" class="btn btn-secondary">Reset</button>
-                <button type="submit" id="submit" class="btn btn-primary">Register</button>
-            </div>
-        </form>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="container-fluid text-center d-flex plus">
-    <a class="nav-link bg-primary text-white text-center bullet" href="/add">
-        <span>+</span>
-    </a>
-</div>
-@endsection
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login - {{ config('app.name') }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body,
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .container-fluid {
+            width: 100%;
+            height: 100vh;
+            background-color: rgb(43, 27, 6);
+        }
+
+        .wrapper {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .card {
+            /* min-width: 600px; */
+            background-color: rgb(161, 161, 161);
+        }
+
+        .password input[type="password"] {
+            /* padding-right: 30px; */
+            /* Adjust as needed */
+        }
+
+        .password .icon {
+            position: relative;
+        }
+
+        .password .icon i {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            /* Adjust as needed */
+            transform: translateY(-50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="wrapper row">
+            <div class="card col-lg-4 p-3">
+                <div class="text-center">
+                    <h1>{{ config('app.name') }}</h1>
+                    <p>Sign-In untuk melanjutkan ke aplikasi.</p>
+                </div>
+                <hr>
+                <form id="login" class="needs-validation" action="{{ route('login') }}" method="post" novalidate>
+                    @csrf
+                    <div class="mb-3">
+                        <label for="usernameinput" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="usernameinput" name="username"
+                            aria-describedby="username" placeholder="Enter your nisn/email" required minlength="5">
+                        <div id="username" class="form-text">We'll never share your email with anyone else.</div>
+                        @error('username')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Wajib di sini, minlength 8.
+                        </div>
+                    </div>
+                    <div class="mb-3 password">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <div class="icon">
+                            <input type="password" class="form-control" id="exampleInputPassword1" name="password"
+                                placeholder="Enter your password" required minlength="8">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        @error('password')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Wajib di sini, minlength 8.
+                        </div>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Remember me</label>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="reset" class="btn btn-secondary">Reset</button>
+                        <button type="submit" id="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const passwordInput = document.getElementById('exampleInputPassword1');
+        const eyeIcon = document.querySelector('.password .icon i');
+
+        eyeIcon.addEventListener('click', () => {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        });
+
+        (() => {
+    'use strict'
+    
+    const forms = document.querySelectorAll('.needs-validation')
+
+    Array.from(forms).forEach(form => {
+        const submitButton = form.querySelector('button[type="submit"]')
+        submitButton.disabled = true
+
+        form.addEventListener('input', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+                submitButton.disabled = true
+            } else {
+                submitButton.disabled = false
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+    </script>
+</body>
+
+</html>

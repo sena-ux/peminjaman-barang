@@ -1,0 +1,13 @@
+.fl-wrapper {
+    margin-top: 40px;
+}
+
+.dt-container {
+    text-transform: capitalize;
+}
+
+.required::after{
+    content: ' * ';
+    color: rgb(202, 31, 31);
+}
+

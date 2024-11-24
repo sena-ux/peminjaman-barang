@@ -56,6 +56,13 @@ return [
             'throw' => false,
         ],
 
+        'kondisiBarang' => [
+        'driver' => 'local',
+        'root' => public_path('uploads/kondisiBarang'),
+        'url' => env('APP_URL') . '/uploads/kondisiBarang',
+        'visibility' => 'public',
+    ],
+
     ],
 
     /*
