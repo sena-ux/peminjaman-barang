@@ -71,14 +71,14 @@
                                                 @endforeach
                                             </optgroup>
                                         </select>
-                                        <button type="submit" id="asignRole" class="d-none">Submit</button>
+                                        <button type="submit" id="deleteRole" class="d-none">Submit</button>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-danger"
-                                        onclick="document.getElementById('asignRole').click()"
+                                        onclick="document.getElementById('deleteRole').click()"
                                         data-bs-dismiss="modal">Delete Role {{ $role_name
                                         }}</button>
                                 </div>
