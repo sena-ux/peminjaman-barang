@@ -67,7 +67,7 @@
                                             <option value="">Select User</option>
                                             <optgroup label="User">
                                                 @foreach ($user->getRoleNames() as $key => $item)
-                                                <option value="{{$item->name}}">{{ $item->name }}</option>
+                                                <option value="{{$item}}">{{ $item }}</option>
                                                 @endforeach
                                             </optgroup>
                                         </select>
