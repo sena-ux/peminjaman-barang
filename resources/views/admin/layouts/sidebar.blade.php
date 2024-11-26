@@ -67,7 +67,7 @@
                     </ul> --}}
                 </li>
 
-                @role('admin|petugas|staff|superadmin')
+                @role('admin|petugas|staf|superadmin')
                 <li class="nav-header">Umum</li>
                 <li class="nav-item">
                     <a href="{{ route('kelas.index') }}"
@@ -127,7 +127,7 @@
                     </a>
                 </li> --}}
                 @endrole
-                @role('admin|petugas|staff|superadmin')
+                @role('admin|petugas|staf|superadmin')
                 <li class="nav-header">Regulasi</li>
                 <li class="nav-item">
                     <a href="{{ route('pemeliharaan.index') }}"
