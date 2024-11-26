@@ -45,7 +45,7 @@
                     <td class="align-middle">
                         <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#asignRole{{$user->id}}"
                             id="asignUser_id">Asign Role</a>
-                        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteRole{{$user->id}}"
+                        <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteRole{{$user->id}}"
                             id="asignUser_id">Delete Role</a>
                     </td>
                     {{-- =============================== Asign Role =============================== --}}
