@@ -54,7 +54,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteRoleLabel">Asign Role dengan ID USER :
+                                    <h5 class="modal-title" id="deleteRoleLabel">Delete Role dengan ID USER :
                                         {{$user->id}}
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
