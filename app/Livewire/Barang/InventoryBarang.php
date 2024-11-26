@@ -18,7 +18,7 @@ class InventoryBarang extends Component
 
     public $page = 'index', $paginate = 10, $dataBarang, $dataRuangan, $kondisi, $status;
 
-    public $barang, $ruangan, $kode_barang, $kondisiData, $statusData, $date, $updated_at, $inv_brg_id;
+    public $barang, $ruangan, $kode_barang, $kondisiData, $statusData, $date, $updated_at, $inv_brg_id, $jumlah_barang;
     public $kondisiBarang = [];
 
     public function __construct()
@@ -65,6 +65,7 @@ class InventoryBarang extends Component
                 'id_barang' => $this->barang,
                 'id_ruangan' => $this->ruangan,
                 'kode_barang' => $kode_barang,
+                'jumlah' => $this->jumlah_barang,
                 // 'status_barang' => $this->statusData,
                 'tanggal' => now()->toDateString()
             ]);
@@ -100,7 +101,8 @@ class InventoryBarang extends Component
         $this->date = $inv_brg->tanggal;
         $this->updated_at = $inv_brg->updated_at;
         $this->inv_brg_id = $id_inv_brg;
-        $this->kondisiBarang = Kondisi_Brg::with(['inventory'])->where('inv_brg_id', $inv_brg->id)->get();
+        $this->jumlah_barang = $inv_brg->jumlah;
+        $this->kondisiBarang = Kondisi_Brg::with(['inventory'])->where('inv_brg_id', $inv_brg->id)->latest()->get();
         $this->page = 'show';
     }
 
@@ -119,6 +121,7 @@ class InventoryBarang extends Component
         $this->statusData = "";
         $this->barang = "";
         $this->ruangan = "";
+        $this->jumlah_barang = "";
         $this->kode_barang = "";
     }
 
@@ -126,8 +129,8 @@ class InventoryBarang extends Component
     {
         $prefix = 'BRG';
         $date = Carbon::now()->format('Ymd');
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        $length = 2;
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $length = 1;
 
         do {
             $randomString = substr(str_shuffle(str_repeat($characters, $length)), 0, $length);

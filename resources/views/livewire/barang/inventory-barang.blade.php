@@ -14,8 +14,8 @@
                         <th scope="col">Kode Barang</th>
                         <th scope="col">Date</th>
                         <th scope="col">Updated</th>
-                        {{-- <th scope="col">Status Barang</th> --}}
-                        {{-- <th scope="col">Kondisi Barang</th> --}}
+                        <th scope="col">Status Barang</th>
+                        <th scope="col">Kondisi Barang</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -29,7 +29,7 @@
                         <td>{{ $inventoryBarang->tanggal }}</td>
                         <td>{{ $inventoryBarang->updated_at .' | ' . $inventoryBarang->updated_at->diffForHumans() }}
                         </td>
-                        {{-- <td>
+                        <td>
                             <p class="badge 
                             {{ $inventoryBarang->status_barang == 'Tersedia' ? 'badge-success' : '' }}
                             {{ $inventoryBarang->status_barang == 'Tidak Tersedia' ? 'badge-danger' : '' }}
@@ -37,7 +37,7 @@
                             {{ $inventoryBarang->status_barang == 'Dipinjam' ? 'badge-info' : '' }}
                             {{ $inventoryBarang->status_barang == 'Habis' ? 'badge-warning' : '' }}
                             {{ empty($inventoryBarang->status_barang) ? 'badge-secondary' : '' }}">
-                                {{ $inventoryBarang->status_barang }}
+                                {{ $inventoryBarang->status_barang ?? "No Data" }}
                             </p>
                         </td>
                         <td>
@@ -49,9 +49,9 @@
                             {{ $inventoryBarang->kondisi == 'Rusak Parah' ? 'badge-warning' : '' }}
                             {{ $inventoryBarang->kondisi == 'Baru' ? 'badge-warning' : '' }}
                             {{ empty($inventoryBarang->kondisi) ? 'badge-secondary' : '' }}">
-                                {{ $inventoryBarang->kondisi }}
+                                {{ $inventoryBarang->kondisi ?? "No Data" }}
                             </p>
-                        </td> --}}
+                        </td>
                         <td>
                             <a wire:click='show({{$inventoryBarang->id}})' class="btn btn-info">Show</a>
                         </td>
@@ -98,17 +98,25 @@
                     </select>
                 </div>
                 <div class="col-md-6 p-2">
+                    <label for="date">Tanggal</label>
+                    <input type="date" wire:model="date" id="date" class="form-control" placeholder="Kode Barang"
+                        aria-describedby="date">
+                </div>
+                <div class="col-md-6 p-2">
+                    <label for="jumlah_barang">Jumlah Barang</label>
+                    <input type="number" wire:model="jumlah_barang" id="jumlah_barang" class="form-control"
+                        placeholder="Masukkan Jumlah Barang" aria-describedby="jumlah_barang">
+                    <small id="jumlah_barang" class="form-text text-muted">
+                        Penting: Jika ini barang alat kebersihan seperti sapu silahkan masukkan perkelas ada berapa sapunya.
+                    </small>
+                </div>
+                <div class="col-md-6 p-2">
                     <label for="kode_barang">Kode Barang</label>
                     <input type="text" wire:model="kode_barang" id="kode_barang" class="form-control"
                         placeholder="Kode Barang" aria-describedby="kode_barang">
                     <small id="kode_barang" class="form-text text-muted">
                         Penting: Jika Kode Barang kosong maka aplikasi akan generate Kode Barang secara acak
                     </small>
-                </div>
-                <div class="col-md-6 p-2">
-                    <label for="date">Tanggal</label>
-                    <input type="date" wire:model="date" id="date" class="form-control" placeholder="Kode Barang"
-                        aria-describedby="date">
                 </div>
                 {{-- <div class="col-md-6 p-2">
                     <label for="kondisi" class="required">Kondisi</label>
@@ -151,9 +159,9 @@
 
         {{-- ================================ SHOW ==================================== --}}
         @if ($page == "show")
-        {{-- <div class="text-end">
-            <a wire:click='create' class="btn btn-primary my-2 p-2">Update Inventory Barang</a>
-        </div> --}}
+        <div class="text-end">
+            <a wire:click='$set("page", "index")' class="btn btn-primary my-2 p-2">Back</a>
+        </div>
         <div class="table-responsive border-bottom border-light">
             <table class="table table-bordered">
                 <thead>
@@ -172,7 +180,7 @@
                         <td>{{ $kode_barang }}</td>
                         <td>{{ $date }}
                         </td>
-                        <td>{{ $updated_at }}
+                        <td>{{ $updated_at . '|' . $updated_at->diffForHumans() }}
                         </td>
                     </tr>
                 </tbody>
@@ -331,7 +339,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title text-danger" id="edit-kondisi-barangLabel">Delete Kondisi
+                        <h5 class="modal-title text-danger" id="edit-kondisi-barangLabel">Update Kondisi
                             {{$barang}}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>

@@ -30,7 +30,6 @@
                     <th scope="col">#</th>
                     <th scope="col">Nama Ruangan</th>
                     <th scope="col">Lokasi</th>
-                    <th scope="col">Kelas</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -40,7 +39,6 @@
                     <th scope="row">{{ $ruangans->firstItem() + $key }}</th>
                     <td>{{ $ruangan->nama_ruangan }}</td>
                     <td>{{ $ruangan->lokasi }}</td>
-                    <td>{{ $ruangan->kelas->name }}</td>
                     <td>
                         <a wire:click='show({{$ruangan->id}})' class="btn btn-info">Show</a>
                         <a wire:click='edit({{$ruangan->id}})' class="btn btn-primary">Edit</a>
@@ -158,7 +156,6 @@
                 <tr>
                     <th scope="col">Nama Ruangan</th>
                     <th scope="col">Lokasi</th>
-                    <th scope="col">Kelas</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -166,7 +163,6 @@
                 <tr>
                     <td>{{ $nama_ruangan }}</td>
                     <td>{{ $lokasi }}</td>
-                    <td>{{ $nama_kelas }}</td>
                     <td>
                         <a wire:click='$set("page", "edit")' class="btn btn-primary">Update</a>
                     </td>

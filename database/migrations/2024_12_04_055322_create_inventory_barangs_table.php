@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('inventory_barangs', function (Blueprint $table) {
             $table->id();              
-            // $table->enum('status_barang', ['Tersedia', 'Dipinjam', 'Rusak', 'Habis', 'Tidak Tersedia'])->nullable();
-            // $table->string('kondisi')->nullable();
+            $table->enum('status_barang', ['Tersedia', 'Dipinjam', 'Rusak', 'Habis', 'Tidak Tersedia'])->nullable();
+            $table->string('kondisi')->nullable();
             $table->string('kode_barang')->unique();
-            $table->string('jumlah');
+            $table->integer('jumlah')->nullable();
             $table->date('tanggal');
             $table->unsignedBigInteger('id_barang'); 
             $table->unsignedBigInteger('id_ruangan');

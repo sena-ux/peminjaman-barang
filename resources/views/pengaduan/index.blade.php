@@ -1,10 +1,10 @@
 @extends('admin/layouts/main')
-@section('nameAplication', 'Pengaduan Umum')
+@section('nameAplication', 'Kerusakan Umum')
 @section('content')
 @section('linkLatest')
     <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
     <li class="breadcrumb-item active">Pengaduan</li>
-    <li class="breadcrumb-item active">Pengaduan Umum</li>
+    <li class="breadcrumb-item active">Kerusakan Umum</li>
 @endsection
 <section class="content">
     <div class="container-fluid">

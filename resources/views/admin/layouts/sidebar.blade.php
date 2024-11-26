@@ -39,7 +39,7 @@
                         class="nav-link {{ Request::segment(1) == 'pengaduan' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-exclamation-circle"></i>
                         <p>
-                            Pengaduan
+                            Kerusakan
                             {{-- <i class="fas fa-angle-left right"></i> --}}
                         </p>
                     </a>

@@ -45,7 +45,7 @@ class Ruangan extends Component
         $this->lokasi = $data->lokasi;
         $this->kelas_id = $data->id_kelas;
         $this->ruangan_id = $id;
-        $this->nama_kelas = $data->kelas->name;
+        // $this->nama_kelas = $data->kelas->name;
         $this->page = 'show';
     }
     
@@ -55,7 +55,7 @@ class Ruangan extends Component
         $this->lokasi = $data->lokasi;
         $this->kelas_id = $data->id_kelas;
         $this->ruangan_id = $id;
-        $this->nama_kelas = $data->kelas->name;
+        // $this->nama_kelas = $data->kelas->name;
         $this->page = 'edit';
     }
 
