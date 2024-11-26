@@ -66,7 +66,7 @@
                                         <select wire:model="role_name" id="user" class="form-control">
                                             <option value="">Select User</option>
                                             <optgroup label="User">
-                                                @foreach ($listRole as $item)
+                                                @foreach ($user->getRoleNames() as $key => $item)
                                                 <option value="{{$item->name}}">{{ $item->name }}</option>
                                                 @endforeach
                                             </optgroup>
@@ -77,9 +77,9 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary"
+                                    <button type="button" class="btn btn-danger"
                                         onclick="document.getElementById('asignRole').click()"
-                                        data-bs-dismiss="modal">Asign Role {{ $role_name
+                                        data-bs-dismiss="modal">Delete Role {{ $role_name
                                         }}</button>
                                 </div>
                             </div>
