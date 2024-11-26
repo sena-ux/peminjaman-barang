@@ -33,7 +33,18 @@ class AsignRole extends Component
             toastr()->error('Terjadi kesalahan asign role data.');
         }
     }
+    
+    public function deleteRole($id){
+        try {
+            $user = User::find($id);
+            $user->removeRole($this->role_name);
+            toastr()->success('Remove role '. $this->role_name .' successfully');
+            $this->page = 'index';
+        } catch (\Throwable $th) {
+            toastr()->error('Terjadi kesalahan asign role data.');
+        }
 
+    }
 
     public function clear()
     {

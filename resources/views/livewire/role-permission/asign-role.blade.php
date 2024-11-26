@@ -45,14 +45,55 @@
                     <td class="align-middle">
                         <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#asignRole{{$user->id}}"
                             id="asignUser_id">Asign Role</a>
+                        <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteRole{{$user->id}}"
+                            id="asignUser_id">Delete Role</a>
                     </td>
                     {{-- =============================== Asign Role =============================== --}}
-                    <div class="modal fade" id="asignRole{{$user->id}}" data-bs-backdrop="static" data-bs-keyboard="false"
-                        tabindex="-1" aria-labelledby="asignRoleLabel" aria-hidden="true">
+                    <div class="modal fade" id="deleteRole{{$user->id}}" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteRoleLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="asignRoleLabel">Asign Role dengan ID USER : {{$user->id}}
+                                    <h5 class="modal-title" id="deleteRoleLabel">Asign Role dengan ID USER :
+                                        {{$user->id}}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form wire:submit.prevent='deleteRole({{$user->id}})'>
+                                        <label for="user">Select User</label>
+                                        <select wire:model="role_name" id="user" class="form-control">
+                                            <option value="">Select User</option>
+                                            <optgroup label="User">
+                                                @foreach ($listRole as $item)
+                                                <option value="{{$item->name}}">{{ $item->name }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        </select>
+                                        <button type="submit" id="asignRole" class="d-none">Submit</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="document.getElementById('asignRole').click()"
+                                        data-bs-dismiss="modal">Asign Role {{ $role_name
+                                        }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- ===================================== End ================================= --}}
+                    {{-- =============================== Asign Role =============================== --}}
+                    <div class="modal fade" id="asignRole{{$user->id}}" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="asignRoleLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="asignRoleLabel">Asign Role dengan ID USER :
+                                        {{$user->id}}
                                     </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
@@ -75,7 +116,8 @@
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-primary"
-                                        onclick="document.getElementById('asignRole').click()" data-bs-dismiss="modal">Asign Role {{ $role_name
+                                        onclick="document.getElementById('asignRole').click()"
+                                        data-bs-dismiss="modal">Asign Role {{ $role_name
                                         }}</button>
                                 </div>
                             </div>
