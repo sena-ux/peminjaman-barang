@@ -18,7 +18,7 @@ class InventoryBarang extends Component
 
     public $page = 'index', $paginate = 10, $dataBarang, $dataRuangan, $kondisi, $status;
 
-    public $barang, $ruangan, $kode_barang, $kondisiData, $statusData, $date, $updated_at, $inv_brg_id, $jumlah_barang;
+    public $barang, $ruangan, $kode_barang, $kondisiData, $statusData, $date, $updated_at, $inv_brg_id, $jumlah_barang, $alatKebersihan;
     public $kondisiBarang = [];
 
     public function __construct()
@@ -54,27 +54,42 @@ class InventoryBarang extends Component
     public function store()
     {
         try {
-            $kode_barang = $this->kode_barang ?? $this->generateKodeBarang();
             $this->validate([
                 'kode_barang' => 'unique:inventory_barangs',
                 'barang' => 'required',
                 'ruangan' => 'required',
             ]);
-            $inv_brg = inventoryBarangModel::createOrFirst(['id_barang' => $this->barang], [
-                // 'kondisi' => $this->kondisiData,
-                'id_barang' => $this->barang,
-                'id_ruangan' => $this->ruangan,
-                'kode_barang' => $kode_barang,
-                'jumlah' => $this->jumlah_barang,
-                // 'status_barang' => $this->statusData,
-                'tanggal' => now()->toDateString()
-            ]);
+
+            if ($this->alatKebersihan == false) {
+                for ($i = 1; $i <= intval($this->jumlah_barang); $i++) {
+                    $inv_brg = inventoryBarangModel::create([
+                        'id_barang' => $this->barang,
+                        // 'kondisi' => $this->kondisiData,
+                        'id_ruangan' => $this->ruangan,
+                        'kode_barang' => $this->generateKodeBarang(),
+                        'jumlah' => 1,
+                        // 'status_barang' => $this->statusData,
+                        'tanggal' => $this->date
+                    ]);
+                }
+            } else {
+                $inv_brg = inventoryBarangModel::create([
+                    'id_barang' => $this->barang,
+                    // 'kondisi' => $this->kondisiData,
+                    'id_ruangan' => $this->ruangan,
+                    'kode_barang' => $this->generateKodeBarang(),
+                    'jumlah' => $this->jumlah_barang,
+                    // 'status_barang' => $this->statusData,
+                    'tanggal' => $this->date
+                ]);
+
+            }
 
             // Kondisi_Brg::create([
             //     'inv_brg_id' => $inv_brg->id,
             //     'date' => $this->date,
-            //     'status_barang' => $inv_brg->id,
-            //     'kondisi' => $inv_brg->id,
+            //     'status_barang' => $this->statusData,
+            //     'kondisi' => $this->kondisiData,
             // ]);
             toastr()->success('Inventory Barang New saved Successfully!');
             $this->clear();
@@ -106,6 +121,28 @@ class InventoryBarang extends Component
         $this->page = 'show';
     }
 
+    public function deleteInventory($id)
+    {
+        try {
+            $inventory = inventoryBarangModel::find($id);
+            $kondisi = Kondisi_Brg::where('inv_brg_id', $id)->get();
+
+            if ($kondisi->isNotEmpty()) {
+                foreach ($kondisi as $item) {
+                    $item->delete();
+                }
+            }
+            $inventory->delete();
+
+            toastr()->success("Deleted Inventory Barang Successfully.");
+            $this->page = "index";
+        } catch (\Throwable $th) {
+            toastr()->error("Terjadi kesalahan saat delete Inventory Barang.");
+            $this->page = 'index';
+        }
+    }
+
+
 
     public function render()
     {
@@ -134,7 +171,8 @@ class InventoryBarang extends Component
 
         do {
             $randomString = substr(str_shuffle(str_repeat($characters, $length)), 0, $length);
-            $kodeBarang = $prefix . '-' . uniqid() . $randomString;
+            // $kodeBarang = $prefix . '-' . uniqid() . $randomString;
+            $kodeBarang = $prefix . '-' . substr(bin2hex(random_bytes(3)), 0, 3) . $randomString;
             $exists = inventoryBarangModel::where('kode_barang', $kodeBarang)->exists();
         } while ($exists);
 
@@ -150,7 +188,6 @@ class InventoryBarang extends Component
             if (file_exists(public_path('uploads/kondisiBarang/' . $barang->images))) {
                 unlink(public_path('uploads/kondisiBarang/' . $barang->images));
             }
-
             $barang->delete();
             $this->kondisiBarang = Kondisi_Brg::all();
             toastr()->success('Data berhasil dihapus.');

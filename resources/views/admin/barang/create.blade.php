@@ -30,7 +30,7 @@
                     <div class="col-md-6 p-2">
                         <label for="namaBarang" class="required">Nama Barang</label>
                         <input type="text" name="name" id="namaBarang" class="form-control"
-                            placeholder="Nama Barang : AC" required>
+                            placeholder="Nama Barang : AC Daikin" required>
                     </div>
                     <div class="col-md-6 p-2">
                         <label for="sumberDana" class="required">Sumber Dana</label>

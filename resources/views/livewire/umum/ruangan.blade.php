@@ -4,20 +4,43 @@
         Saving post...
     </div>
     @endsection
+    {{-- ============================= Import Error ============================ --}}
+    @if (session('import_errors'))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger">
+            <p>Beberapa baris gagal diimpor:</p>
+            <ul>
+                @foreach (session('import_errors') as $error)
+                <li>
+                    Baris {{ $error['row'] ?? 'Tidak diketahui' }}:
+                    {{ implode(', ', (array) ($error['error'] ?? 'Kesalahan tidak diketahui')) }}
+                </li>
+                @endforeach
+            </ul>
+        </div>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    @endif
+
     {{-- ============================== Create ================================= --}}
     @if ($page == 'index')
     <div class="row">
+        <div class="d-flex bg-secondary p-2 my-2 rounded">
+            <a wire:click='$set("page", "import")' class="btn btn-info mx-2">Import Ruangan</a>
+        </div>
         <div class="d-flex justify-content-between pb-3">
             <div>
+                @if ($ruangans->count() >= 10)
                 <label for="">Page : </label>
                 <select wire:model.live="paginate" id="">
-                    <option value="1">1</option>
                     <option value="10">10</option>
+                    @if ($ruangans->count() >= 20)
                     <option value="20">20</option>
-                    <option value="40">40</option>
-                    <option value="60">60</option>
-                    <option value="100">100</option>
+                    @endif
                 </select>
+                @endif
             </div>
             <div class="right">
                 <a wire:click='$set("page", "create")' class="btn btn-primary mx-2">Create new Ruangan</a>
@@ -42,13 +65,14 @@
                     <td>
                         <a wire:click='show({{$ruangan->id}})' class="btn btn-info">Show</a>
                         <a wire:click='edit({{$ruangan->id}})' class="btn btn-primary">Edit</a>
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#deleteRuangan{{$ruangan->id}}">Delete</a>
+                        <a class="btn btn-danger" data-toggle="modal"
+                            data-target="#deleteRuangan{{$ruangan->id}}">Delete</a>
                     </td>
                 </tr>
 
                 <!-- Modal Delete -->
-                <div class="modal fade" id="deleteRuangan{{$ruangan->id}}" tabindex="-1" aria-labelledby="deleteRuanganLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="deleteRuangan{{$ruangan->id}}" tabindex="-1"
+                    aria-labelledby="deleteRuanganLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -65,7 +89,8 @@
                                         <span class="sr-only">Loading...</span>
                                     </div>
                                     <button type="submit" class="btn btn-danger"
-                                        wire:click.prevent='delete({{$ruangan->id}})' data-dismiss="modal">Delete {{ $ruangan->nama_ruangan
+                                        wire:click.prevent='delete({{$ruangan->id}})' data-dismiss="modal">Delete {{
+                                        $ruangan->nama_ruangan
                                         }}</button>
                                 </div>
                             </div>
@@ -227,5 +252,45 @@
             </div>
         </div>
     </form>
+    @endif
+
+    {{-- ========================= Import Ruangan ====================== --}}
+    @if ($page == "import")
+    <div class="bg-black p-3 my-2 d-flex justify-content-between align-items-center rounded">
+        <h6 class="text-bold mt-auto pt-auto">Import Ruangan</h6>
+        <a wire:click='$set("page", "index")' class="btn btn-primary">Back</a>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card text-start">
+                <div class="card-header">
+                    <h5 class="card-title">Untuk import data ruangan silahkan download template import nya <a
+                            class="btn btn-primary" wire:click.prevent='downloadTemplate'>Template Import</a></h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{route('import.ruangan')}}" enctype="multipart/form-data">
+                        @method("POST")
+                        @csrf
+                        <input type="file" name="file" id="importRuangan" class="form-control" accept=".xlsx,.xls">
+                        <button type="submit" class="btn btn-primary p-2 my-2">Import Ruangan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-start">
+                <div class="card-header">
+                    Ketentuan Import Ruangan
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>Header tolong jangan di hapus yang berapa di baris pertama paling atas</li>
+                        <li>Isi mulai dari baris kedua</li>
+                        <li>Penulisan Nama Ruangan adalah menggunakan bilangan Kalimat Baku, misalnya : <b>Lab Bahasa</b></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
     @endif
 </div>

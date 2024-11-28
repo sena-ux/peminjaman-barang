@@ -2,48 +2,27 @@
 
 namespace App\Imports;
 
-use App\Models\Kelas;
 use App\Models\Ruangan;
-use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithProgressBar;
 use Maatwebsite\Excel\Concerns\WithSkipDuplicates;
 use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Validators\Failure;
 
-class KelasImport implements ToModel, WithProgressBar, WithHeadingRow, WithBatchInserts, WithSkipDuplicates, WithUpserts, WithValidation
+class ImportRuangan implements ToModel, WithBatchInserts, WithHeadingRow, WithSkipDuplicates, WithUpserts, WithValidation
 {
     public $successCount = 0;
     public $errorCount = 0;
     public $errors = [];
 
-    use Importable;
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
     public function model(array $row)
     {
         try {
-            $kelas = Kelas::updateOrCreate(
-                ['name' => $row['nama_kelas']],
-                [
-                    'description' => $row['keterangan'],
-                    'tahun_ajar' => $row['tahun_pelajaran'],
-                ]
-            );
-
             $ruangan = Ruangan::updateOrCreate(
-                ['nama_ruangan' => $row['nama_kelas']],
-                [
-                    'lokasi' => $row['keterangan'],
-                    'id_kelas' => $kelas->id,
-                ]
+                ['nama_ruangan' => $row['nama_ruangan']],
+                ['nama_ruangan' => $row['nama_ruangan'], 'lokasi' => $row['lokasi'], 'id_kelas' => null]
             );
 
             $this->successCount++;
@@ -69,24 +48,22 @@ class KelasImport implements ToModel, WithProgressBar, WithHeadingRow, WithBatch
 
     public function uniqueBy()
     {
-        return 'nama_kelas';
+        return 'nama_ruangan';
     }
 
     public function rules(): array
     {
         return [
-            '*.nama_kelas' => 'required|string',
-            '*.tahun_pelajaran' => 'required|numeric',
-            '*.keterangan' => 'required|string',
+            '*.nama_ruangan' => 'required|string',
+            '*.lokasi' => 'required|string',
         ];
     }
 
     public function customValidationMessages()
     {
         return [
-            '*.nama_kelas.required' => 'Nama Ruangan wajib diisi.',
-            '*.tahun_pelajaran.required' => 'Lokasi wajib diisi.',
-            '*.tahun_pelajaran.numeric' => 'Tahun ajar harus numeric. Misalnya : 2024.',
+            '*.nama_ruangan.required' => 'Nama Ruangan wajib diisi.',
+            '*.lokasi.required' => 'Lokasi wajib diisi.'
         ];
     }
 

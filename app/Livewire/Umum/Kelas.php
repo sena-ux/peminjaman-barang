@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Umum;
 
+use App\Exports\TemplateKelasImport;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Kelas extends Component
 {
@@ -51,6 +53,17 @@ class Kelas extends Component
         $this->page = 'edit';
     }
 
+    public function downloadTemplate(){
+        try {
+            toastr()->success('Template import kelas berhasil di download.');
+            $this->page = "import";
+            return Excel::download(new TemplateKelasImport, 'Template-Kelas-Import.xlsx');
+        } catch (\Throwable $th) {
+            toastr()->error('Terjadi kelasahan saat download template import kelas.');
+            $this->page = "import";
+        }
+    }
+
     public function update($id)
     {
         try {
@@ -92,7 +105,7 @@ class Kelas extends Component
     public function render()
     {
         return view('livewire.umum.kelas', [
-            'kelass' => \App\Models\Kelas::paginate(intval($this->paginate)),
+            'kelass' => \App\Models\Kelas::latest()->paginate(intval($this->paginate)),
         ]);
     }
 }

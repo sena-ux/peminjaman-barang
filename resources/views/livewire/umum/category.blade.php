@@ -9,15 +9,15 @@
     <div class="row">
         <div class="d-flex justify-content-between pb-3">
             <div>
+                @if ($categorys->count() >= 10)
                 <label for="">Page : </label>
                 <select wire:model.live="paginate" id="">
-                    <option value="1">1</option>
                     <option value="10">10</option>
+                    @if ($categorys->count() >= 20)
                     <option value="20">20</option>
-                    <option value="40">40</option>
-                    <option value="60">60</option>
-                    <option value="100">100</option>
+                    @endif
                 </select>
+                @endif
             </div>
             <div class="right">
                 <a wire:click='$set("page", "create")' class="btn btn-primary mx-2">Create new Category</a>

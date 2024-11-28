@@ -54,8 +54,31 @@
                         </td>
                         <td>
                             <a wire:click='show({{$inventoryBarang->id}})' class="btn btn-info">Show</a>
+                            <a class="btn btn-danger m-1" data-toggle="modal"
+                                data-target="#deleteInventoryBarang{{$inventoryBarang->id}}">Delete</a>
                         </td>
                     </tr>
+                    {{-- Delete Inventory --}}
+                    <div class="modal fade" id="deleteInventoryBarang{{$inventoryBarang->id}}" tabindex="-1"
+                        aria-labelledby="deleteInventoryBarangLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-danger" id="deleteInventoryBarangLabel">Delete Inventory
+                                        {{$inventoryBarang->kode_barang}}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger"
+                                        wire:click='deleteInventory({{$inventoryBarang->id}})'
+                                        data-dismiss="modal">Delete
+                                        {{$inventoryBarang->kode_barang}}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     @empty
                     <tr class="text-center">
                         <td colspan="9">Saat ini belum ada data inventory barang.</td>
@@ -102,22 +125,14 @@
                     <input type="date" wire:model="date" id="date" class="form-control" placeholder="Kode Barang"
                         aria-describedby="date">
                 </div>
-                <div class="col-md-6 p-2">
-                    <label for="jumlah_barang">Jumlah Barang</label>
-                    <input type="number" wire:model="jumlah_barang" id="jumlah_barang" class="form-control"
-                        placeholder="Masukkan Jumlah Barang" aria-describedby="jumlah_barang">
-                    <small id="jumlah_barang" class="form-text text-muted">
-                        Penting: Jika ini barang alat kebersihan seperti sapu silahkan masukkan perkelas ada berapa sapunya.
-                    </small>
-                </div>
-                <div class="col-md-6 p-2">
+                {{-- <div class="col-md-6 p-2">
                     <label for="kode_barang">Kode Barang</label>
                     <input type="text" wire:model="kode_barang" id="kode_barang" class="form-control"
                         placeholder="Kode Barang" aria-describedby="kode_barang">
                     <small id="kode_barang" class="form-text text-muted">
                         Penting: Jika Kode Barang kosong maka aplikasi akan generate Kode Barang secara acak
                     </small>
-                </div>
+                </div> --}}
                 {{-- <div class="col-md-6 p-2">
                     <label for="kondisi" class="required">Kondisi</label>
                     <select class="custom-select" wire:model="kondisiData" id="kondisi" required>
@@ -144,9 +159,26 @@
                         </optgroup>
                     </select>
                 </div> --}}
+                <div class="col-md-6 p-2" id="jumlah">
+                    <label for="jumlah_barang">Jumlah Barang</label>
+                    <input type="number" wire:model="jumlah_barang" id="jumlah_barang" class="form-control"
+                        placeholder="Masukkan Jumlah Barang" aria-describedby="jumlah_barang">
+                    <small id="jumlah_barang" class="form-text text-muted">
+                        Penting: Jika ini barang alat kebersihan seperti sapu silahkan masukkan perkelas ada berapa
+                        sapunya.
+                    </small>
+                </div>
+                <div class="col-md-12 p-2">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch1"
+                            wire:model='alatKebersihan'>
+                        <label class="custom-control-label" for="customSwitch1">Check toggle untuk mengaktifkan mode
+                            insert inventory barang alat kebersihan.</label>
+                    </div>
+                </div>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="reset" class="btn btn-secondary">Reset Form</button>
+                <a href="{{ route(" barang.index") }}" class="btn btn-secondary">Create Barang</a>
                 <div class="d-flex align-item-center">
                     <div class="spinner-border text-primary mr-2" role="status" wire:loading wire:target="store">
                         <span class="sr-only">Loading...</span>
@@ -209,7 +241,7 @@
                         <td class="align-middle">{{ $item->status_barang }}</td>
                         <td>
                             <a data-bs-toggle="modal" data-bs-target="#showImages{{$item->id}}">
-                                <img src="{{ asset('uploads/kondisiBarang/' . $item->images ) }}" class="img-thumbnail"
+                                <img src="{{ asset($item->images ) }}" class="img-thumbnail"
                                     style="width: 80px; height: 80px;" alt="Image Kondisi Barang" srcset="">
                             </a>
                         </td>
@@ -217,13 +249,14 @@
                             {{-- <a class="btn btn-info m-1" data-toggle="modal"
                                 data-target="#edit-kondisi-barang">Edit</a> --}}
                             <a class="btn btn-danger m-1" data-toggle="modal"
-                                data-target="#delete-kondisi-barang">Delete</a>
+                                data-target="#delete-kondisi-barang{{$item->id}}">Delete</a>
                         </td>
                     </tr>
 
                     <!-- Modal Show Images -->
-                    <div class="modal fade" id="showImages{{$item->id}}" data-bs-backdrop="static" data-bs-keyboard="false"
-                        tabindex="-1" aria-labelledby="showImages{{$item->id}}Label" aria-hidden="true">
+                    <div class="modal fade" id="showImages{{$item->id}}" data-bs-backdrop="static"
+                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="showImages{{$item->id}}Label"
+                        aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -232,14 +265,15 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <img src="{{ asset('uploads/kondisiBarang/' . $item->images ) }}" alt="Show images" srcset="" class="img-fluid img-thumbnail">
+                                    <img src="{{ asset($item->images ) }}" alt="Show images"
+                                        srcset="" class="img-fluid img-thumbnail">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Modal Create Kondisi Barang -->
-                    <div class="modal fade" id="delete-kondisi-barang" tabindex="-1"
+                    <div class="modal fade" id="delete-kondisi-barang{{$item->id}}" tabindex="-1"
                         aria-labelledby="delete-kondisi-barangLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -271,7 +305,7 @@
         <!-- Modal Create Kondisi Barang -->
         <div class="modal fade" id="create-kondisi-barang" tabindex="-1" aria-labelledby="create-kondisi-barangLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="create-kondisi-barangLabel">Create New Kondisi {{$barang}}</h5>
@@ -285,11 +319,11 @@
                             @csrf
                             <div class="row">
                                 <input type="hidden" name="inv_brg_id" value="{{$inv_brg_id}}">
-                                <div class="col-md-6 p-2">
+                                <div class="form-group">
                                     <label for="date">Tanggal</label>
                                     <input type="date" name="date" id="date" class="form-control">
                                 </div>
-                                <div class="col-md-6 p-2">
+                                <div class="form-group">
                                     <label for="kondisi" class="required">Kondisi</label>
                                     <select class="custom-select" name="kondisi" id="kondisi" required>
                                         <option value="" selected>Open this select Kondisi</option>
@@ -302,7 +336,7 @@
                                         </optgroup>
                                     </select>
                                 </div>
-                                <div class="col-md-6 p-2">
+                                <div class="form-group">
                                     <label for="status" class="required">Status</label>
                                     <select class="custom-select" name="status" id="status" required>
                                         <option value="" selected>Open this select Status</option>
@@ -315,10 +349,15 @@
                                         </optgroup>
                                     </select>
                                 </div>
-                                <div class="col-md-6 p-2">
+                                <div class="form-group">
                                     <label for="images" class="required">Upload Images</label>
                                     <input type="file" name="images" id="images" class="form-control"
-                                        accept=".png,.jpg,.jpeg">
+                                        accept=".png,.jpg,.jpeg,JPG,PNG,JPEG,.gif,.GIF">
+                                </div>
+                                <div class="form-group">
+                                    <label for="keterangan">Keterangan Barang</label>
+                                    <textarea name="keterangan" id="keterangan" cols="30" rows="10"
+                                        class="form-control"></textarea>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary" id="create-kondisi" hidden></button>

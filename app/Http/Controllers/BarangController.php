@@ -11,6 +11,7 @@ use App\Models\Barang;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class BarangController extends Controller
 {
@@ -44,13 +45,17 @@ class BarangController extends Controller
                 'sumber_dana' => 'required',
                 'tahun_pengadaan' => 'required',
                 'category' => 'required',
-                'foto_barang' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'foto_barang' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
             ]);
 
             if ($request->hasFile('foto_barang')) {
                 $foto_barang = $request->file('foto_barang');
                 $foto_barangName = time() . '_' . $foto_barang->getClientOriginalName();
-                $foto_barang->move(public_path('uploads/barang'), $foto_barangName);
+                $fotoBarangPath = $foto_barang->move(public_path('uploads/barang'), $foto_barangName);
+
+                $optimizerChain = OptimizerChainFactory::create();
+                $optimizerChain->optimize($fotoBarangPath);
+
                 $foto_barang_path = 'uploads/barang/' . $foto_barangName;
 
                 Barang::updateOrCreate(['nama_barang' => $request->name],[

@@ -5,10 +5,12 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryBarangController;
 use App\Http\Controllers\InventoryBarangRuanganController;
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\Pengaduan\InventoryRuangKelasBarangController;
 use App\Http\Controllers\Pengaduan\KerusakanUmumController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\Regulasi\PemeliharaanController;
+use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\Tanggapan\TanggapanController;
 use App\Http\Controllers\UploadsController;
@@ -62,9 +64,12 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
         return view('admin.ruangan.index');
     })->name('ruangan.index');
 
+    Route::post('ruangan/import', [RuanganController::class, "importRuangan"])->name('import.ruangan');
+    
     Route::get('kelas', function () {
         return view('admin.kelas.index');
     })->name('kelas.index');
+    Route::post('kelas/import', [KelasController::class, "importKelas"])->name('import.kelas');
 
     Route::get('sarana', function () {
         return view('admin.sarana.index');

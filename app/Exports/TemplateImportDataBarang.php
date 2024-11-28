@@ -28,6 +28,6 @@ class TemplateImportDataBarang implements FromArray, WithHeadings
 
     public function headings(): array
     {
-        return ["Nama_barang", "Deskripsi", "Kode_Barang", "Jenis", "Ruangan", "Tgl_pengadaan", "Harga", "Sumber_dana", "Bagus", "Rusak", "Habis", "Hilang" , "Baru", "Dipinjam", "Keterangan Umum Kolom ini jangan di apa-apain"];
+        return ["Nama_barang", "harga", "sumber_dana", "foto_barang", "total_barang", "tahun_pengadaan", "deskripsi"];
     }
 }

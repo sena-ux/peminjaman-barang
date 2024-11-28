@@ -7,17 +7,20 @@
     {{-- ============================== Create ================================= --}}
     @if ($page == 'index')
     <div class="row">
+        <div class="d-flex bg-secondary p-2 my-2 rounded">
+            <a wire:click='$set("page", "import")' class="btn btn-info mx-2">Import Kelas</a>
+        </div>
         <div class="d-flex justify-content-between pb-3">
             <div>
+                @if ($kelass->count() >= 10)
                 <label for="">Page : </label>
                 <select wire:model.live="paginate" id="">
-                    <option value="1">1</option>
                     <option value="10">10</option>
+                    @if ($kelass->count() >= 20)
                     <option value="20">20</option>
-                    <option value="40">40</option>
-                    <option value="60">60</option>
-                    <option value="100">100</option>
+                    @endif
                 </select>
+                @endif
             </div>
             <div class="right">
                 <a wire:click='$set("page", "create")' class="btn btn-primary mx-2">Create new Kelas</a>
@@ -44,7 +47,8 @@
                     <td>
                         <a wire:click='show({{$kelas->id}})' class="btn btn-info">Show</a>
                         <a wire:click='edit({{$kelas->id}})' class="btn btn-primary">Edit</a>
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#deleteKelas{{$kelas->id}}">Delete</a>
+                        <a class="btn btn-danger" data-toggle="modal"
+                            data-target="#deleteKelas{{$kelas->id}}">Delete</a>
                     </td>
                 </tr>
 
@@ -66,7 +70,7 @@
                                         wire:target="delete">
                                         <span class="sr-only">Loading...</span>
                                     </div>
-                                    <button type="submit" class="btn btn-danger" data-dismiss="modal"
+                                    <button type="submit" class="btn btn-danger text-center" data-dismiss="modal"
                                         wire:click='delete({{$kelas->id}})'>Delete {{ $kelas->name
                                         }}</button>
                                 </div>
@@ -219,4 +223,46 @@
         </div>
     </form>
     @endif
+
+    {{-- ========================= Import Kelas ====================== --}}
+    @if ($page == "import")
+    <div class="bg-black p-3 my-2 d-flex justify-content-between align-items-center rounded">
+        <h6 class="text-bold mt-auto pt-auto">Import Kelas</h6>
+        <a wire:click='$set("page", "index")' class="btn btn-primary">Back</a>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card text-start">
+                <div class="card-header">
+                    <h5 class="card-title">Untuk import data kelas silahkan download template import nya <a
+                            class="btn btn-primary" wire:click.prevent='downloadTemplate'>Template Import</a></h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{route('import.kelas')}}" enctype="multipart/form-data">
+                        @method("POST")
+                        @csrf
+                        <input type="file" name="file" id="importkelas" class="form-control" accept=".xlsx,.xls">
+                        <button type="submit" class="btn btn-primary p-2 my-2">Import Kelas</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-start">
+                <div class="card-header">
+                    Ketentuan Import Kelas
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>Header tolong jangan di hapus yang berapa di baris pertama paling atas</li>
+                        <li>Isi mulai dari baris kedua</li>
+                        <li>Penulihan Tahun Pelajaran wajib menggunakan bilangan numeric, seperti : <b>2024</b></li>
+                        <li>Penulisan kelas adalah menggunakan bilangan romawi, misalnya : <b>X.1</b></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
 </div>

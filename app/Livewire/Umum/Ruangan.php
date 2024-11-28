@@ -2,9 +2,13 @@
 
 namespace App\Livewire\Umum;
 
+use App\Exports\TemplateRuanganImport;
+use App\Imports\ImportRuangan;
 use App\Models\Kelas;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Ruangan extends Component
 {
@@ -92,6 +96,17 @@ class Ruangan extends Component
         }
     }
 
+    public function downloadTemplate(){
+        try {
+            toastr()->success('Template import kelas berhasil di download.');
+            $this->page = "import";
+            return Excel::download(new TemplateRuanganImport, 'TemplateRuanganImport.xlsx');
+        } catch (\Throwable $th) {
+            toastr()->error('Terjadi kelasahan saat download template import kelas.');
+            $this->page = "import";
+        }
+    }
+
     public function clear() {
         $this->nama_ruangan = "";
         $this->lokasi = "";
@@ -100,7 +115,7 @@ class Ruangan extends Component
     public function render()
     {
         return view('livewire.umum.ruangan', [
-            'ruangans' => \App\Models\Ruangan::with(['kelas'])->paginate(intval($this->paginate))
+            'ruangans' => \App\Models\Ruangan::with(['kelas'])->latest()->paginate(intval($this->paginate))
         ]);
     }
 }

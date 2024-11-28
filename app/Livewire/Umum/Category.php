@@ -82,7 +82,7 @@ class Category extends Component
     public function render()
     {
         return view('livewire.umum.category', [
-            'categorys' => \App\Models\Category::paginate(intval($this->paginate)),
+            'categorys' => \App\Models\Category::latest()->paginate(intval($this->paginate)),
         ]);
     }
 }

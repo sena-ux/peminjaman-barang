@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\KelasImport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KelasController extends Controller
 {
@@ -60,5 +62,33 @@ class KelasController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function importKelas(Request $request) {
+        try {
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls',
+            ]);
+    
+            $import = new KelasImport();
+            Excel::import($import, $request->file);
+    
+            // Tampilkan pesan berhasil dan gagal
+            $successCount = $import->successCount;
+            $errorCount = $import->errorCount;
+            $errors = $import->errors;
+    
+            toastr()->success("Data berhasil diimpor: $successCount. Data gagal: $errorCount.");
+    
+            // Jika ada error, simpan untuk ditampilkan
+            if ($errorCount > 0) {
+                session()->flash('import_errors', $errors);
+            }
+    
+            return redirect()->route('kelas.index');
+        } catch (\Throwable $th) {
+            toastr()->error('Terjadi kesalahan saat import data ruangan. ' . $th->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 }

@@ -3,14 +3,10 @@
 namespace App\DataTables;
 
 use App\Models\Barang;
-use App\Models\InventoryBarang;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
 class BarangDataTable extends DataTable
@@ -124,14 +120,14 @@ class BarangDataTable extends DataTable
                                         reloadTable();
                                     }'
                     ],
-                    [
-                        'text' => '<i class="fas fa-download p-1"></i> Import',
-                        'className' => 'btn btn-success',
-                        'attr' => ['id' => 'btn-import'],
-                        'action' => 'function (e, dt, node, config) {
-                                        importDataBarang()
-                                    }'
-                    ],
+                    // [
+                    //     'text' => '<i class="fas fa-download p-1"></i> Import',
+                    //     'className' => 'btn btn-success',
+                    //     'attr' => ['id' => 'btn-import'],
+                    //     'action' => 'function (e, dt, node, config) {
+                    //                     importDataBarang()
+                    //                 }'
+                    // ],
                     [
                         'text' => '<i class="fa-solid fa-plus p-1"></i>',
                         'className' => 'btn btn-primary',
