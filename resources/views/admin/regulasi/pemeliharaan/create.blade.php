@@ -44,9 +44,10 @@
 @endsection
 <section class="content">
     <div class="container-fluid">
-        <div class="card card-default color-palette-box p-3 table-responsive">
-            <div class="bg-black p-2 my-2 rounded d-flex justify-content-between">
-                <h4>Create Pemeliharaan</h4>
+        <div class="card card-default color-palette-box p-2 table-responsive">
+            <div class="bg-secondary p-2 my-2 rounded d-flex justify-content-between align-items-center">
+                <h5>Create Pemeliharaan</h5>
+                <a href="{{route('pemeliharaan.index')}}" class="btn btn-primary">Kembali</a>
             </div>
             <form action="{{ route('pemeliharaan.store') }}" method="POST" enctype="multipart/form-data"
                 class="mt-2 needs-validation" novalidate>
@@ -218,8 +219,8 @@
                     </div>
                     <div class="form-group mb-3 col-md-12">
                         <label for="dokumen-pendukung" class="required">Dokumen Pendukung Lainnya</label>
-                        <textarea name="dokumen_pendukung" id="dokumen-pendukung" cols="30" rows="10"
-                            class="form-control" style="height: 100vh;"></textarea>
+                        <textarea name="dokumen_pendukung" cols="30" rows="10"
+                            class="form-control tinyMce fullAccess" style="height: 100vh;"></textarea>
                         <div class="invalid-feedback">
                             Field wajib diisi.
                         </div>

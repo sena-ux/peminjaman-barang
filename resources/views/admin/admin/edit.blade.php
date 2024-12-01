@@ -4,7 +4,8 @@
 @section('linkLatest')
 <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
 <li class="breadcrumb-item active">User Manajement</li>
-<li class="breadcrumb-item active">Admin</li>
+<li class="breadcrumb-item active"><a href="{{route('admin.index')}}">Admin</a></li>
+<li class="breadcrumb-item active">Update</li>
 @endsection
 @section('action')
 <a href="{{route('admin.show', $admin->id)}}" class="btn btn-outline-primary rounded-pill">Show</a>

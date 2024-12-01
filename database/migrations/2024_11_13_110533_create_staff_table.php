@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('gender')->nullable();
             $table->string('instansi')->default('SMAN 2 Amlapura');
             $table->string('nip')->nullable();
+            $table->string('foto')->default('icon/default-people.png');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

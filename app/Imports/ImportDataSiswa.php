@@ -40,7 +40,8 @@ class ImportDataSiswa implements ToModel, WithHeadingRow, WithProgressBar
             'name' =>  $row['name'],
             'nisn' =>  $row['nisn'],
             'nis' =>  $row['nis'],
-            'no_hp' =>  $row['nohp'],
+            'no_hp' =>  $row['no_hp'],
+            'alamat' => $row['alamat'],
             'kelas_id'=> $kelas->id,
         ]);
 

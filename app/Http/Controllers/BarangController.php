@@ -10,6 +10,9 @@ use App\Models\Amount;
 use App\Models\Barang;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
@@ -20,7 +23,8 @@ class BarangController extends Controller
      */
     public function index(BarangDataTable $dataTable)
     {
-        return $dataTable->render('admin/barang/index');
+        // return $dataTable->render('admin/barang/index');
+        return view('admin/barang/index');
     }
 
     /**
@@ -42,8 +46,6 @@ class BarangController extends Controller
         try {
             $request->validate([
                 'name' => 'required|unique:barangs,nama_barang',
-                'sumber_dana' => 'required',
-                'tahun_pengadaan' => 'required',
                 'category' => 'required',
                 'foto_barang' => 'required|image|mimes:jpeg,png,jpg,gif|max:5048',
             ]);
@@ -51,14 +53,16 @@ class BarangController extends Controller
             if ($request->hasFile('foto_barang')) {
                 $foto_barang = $request->file('foto_barang');
                 $foto_barangName = time() . '_' . $foto_barang->getClientOriginalName();
-                $fotoBarangPath = $foto_barang->move(public_path('uploads/barang'), $foto_barangName);
+                // $fotoBarangPath = $foto_barang->move(public_path('uploads/barang'), $foto_barangName);
 
-                $optimizerChain = OptimizerChainFactory::create();
-                $optimizerChain->optimize($fotoBarangPath);
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($foto_barang);
+                $image->scale(420, 300);
+                $image->save('uploads/barang/' . $foto_barangName, 1);
 
                 $foto_barang_path = 'uploads/barang/' . $foto_barangName;
 
-                Barang::updateOrCreate(['nama_barang' => $request->name],[
+                Barang::updateOrCreate(['nama_barang' => $request->name], [
                     'nama_barang' => $request->name,
                     'sumber_dana' => $request->sumber_dana,
                     'deskripsi' => $request->deskripsi,
@@ -70,7 +74,7 @@ class BarangController extends Controller
                 ]);
             }
             toastr()->success('Barang new created successfully!');
-            return redirect()->back();
+            return redirect()->route('barang.index');
         } catch (\Throwable $th) {
             toastr()->error('Validation Error: ' . $th->getMessage());
             return redirect()->back()->withInput();
@@ -105,7 +109,64 @@ class BarangController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $request->validate([
+                'name' => [
+                    'required',
+                    Rule::unique('barangs', 'nama_barang')->ignore($id),
+                ],
+                'foto_barang' => 'image|mimes:jpeg,png,jpg,gif|max:5048',
+            ]);
+            
+            if ($request->hasFile('foto_barang')) {
+                $foto_barang = $request->file('foto_barang');
+                $foto_barangName = time() . '_' . $foto_barang->getClientOriginalName();
+                // $fotoBarangPath = $foto_barang->move(public_path('uploads/barang'), $foto_barangName);
+
+                if (file_exists(public_path($request->nama_file_barang))) {
+                    unlink(public_path($request->nama_file_barang));
+                }
+
+                $manager = new ImageManager(new Driver());
+                $image = $manager->read($foto_barang);
+                $image->scale(420, 300);
+                $image->save('uploads/barang/' . $foto_barangName, 1);
+
+                $foto_barang_path = 'uploads/barang/' . $foto_barangName;
+
+                Barang::find($id)->update([
+                    'nama_barang' => $request->name,
+                    'sumber_dana' => $request->sumber_dana,
+                    'deskripsi' => $request->deskripsi,
+                    'harga' => $request->harga_barang ?? 0,
+                    'tahun_pengadaan' => $request->tahun_pengadaan,
+                    'foto_barang' => $foto_barang_path,
+                    'total_barang' => $request->total_barang ?? 0,
+                    'id_category' => $request->category,
+                ]);
+            } else {
+                Barang::find($id)->update([
+                    'nama_barang' => $request->name,
+                    'sumber_dana' => $request->sumber_dana,
+                    'deskripsi' => $request->deskripsi,
+                    'harga' => $request->harga_barang ?? 0,
+                    'tahun_pengadaan' => $request->tahun_pengadaan,
+                    'total_barang' => $request->total_barang ?? 1,
+                    'id_category' => $request->category,
+                ]);
+            }
+            toastr()->success('Barang updated successfully!');
+            return redirect()->route('barang.index');
+        } catch (\Throwable $th) {
+            toastr()->error('Terjadi kelasahan : ' . $th->getMessage());
+            return redirect()->back()->withInput();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            toastr()->error('Validation Error: ' . $e->getMessage());
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            toastr()->error('Something went wrong: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
     }
 
     /**

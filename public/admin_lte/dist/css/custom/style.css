@@ -11,3 +11,40 @@
     color: rgb(202, 31, 31);
 }
 
+table{
+    border-collapse: collapse;
+    border: 1px solid black;
+    width: 100%;
+}
+
+tr td{
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.password input[type="password"] {
+    /* padding-right: 30px; */
+    /* Adjust as needed */
+}
+
+.password .icon {
+    position: relative;
+}
+
+.password .icon i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    /* Adjust as needed */
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.icon i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    /* Adjust as needed */
+    transform: translateY(-50%);
+    cursor: pointer;
+}

@@ -7,27 +7,20 @@
     {{-- ============================== Create ================================= --}}
     @if ($page == 'index')
     <div class="row">
+        @canany(['import kelas', 'create kelas'])
         <div class="d-flex bg-secondary p-2 my-2 rounded">
+            @can('import kelas')
             <a wire:click='$set("page", "import")' class="btn btn-info mx-2">Import Kelas</a>
-        </div>
-        <div class="d-flex justify-content-between pb-3">
-            <div>
-                @if ($kelass->count() >= 10)
-                <label for="">Page : </label>
-                <select wire:model.live="paginate" id="">
-                    <option value="10">10</option>
-                    @if ($kelass->count() >= 20)
-                    <option value="20">20</option>
-                    @endif
-                </select>
-                @endif
-            </div>
-            <div class="right">
+            @endcan
+            @can('create kelas')
+            <div class="ml-auto">
                 <a wire:click='$set("page", "create")' class="btn btn-primary mx-2">Create new Kelas</a>
             </div>
+            @endcan
         </div>
+        @endcanany
         {{-- <caption>List of users staf</caption> --}}
-        <table class="table table-dark">
+        <table class="table table-dark dataTableResponsive">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -38,17 +31,23 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($kelass as $key => $kelas)
+                @foreach ($kelass as $key => $kelas)
                 <tr>
-                    <th scope="row">{{ $kelass->firstItem() + $key }}</th>
+                    <th scope="row">{{ $key + 1 }}</th>
                     <td>{{ $kelas->name }}</td>
                     <td>{{ $kelas->tahun_ajar }}</td>
                     <td>{{ $kelas->description }}</td>
                     <td>
+                        @can('show kelas')
                         <a wire:click='show({{$kelas->id}})' class="btn btn-info">Show</a>
+                        @endcan
+                        @can('update kelas')
                         <a wire:click='edit({{$kelas->id}})' class="btn btn-primary">Edit</a>
+                        @endcan
+                        @can('delete kelas')
                         <a class="btn btn-danger" data-toggle="modal"
                             data-target="#deleteKelas{{$kelas->id}}">Delete</a>
+                        @endcan
                     </td>
                 </tr>
 
@@ -78,16 +77,12 @@
                         </div>
                     </div>
                 </div>
-                @empty
-                <tr class="text-center">
-                    <td colspan="8">Tidak ada data terbaru.</td>
-                </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
-        <div class="text-center">
+        {{-- <div class="text-center">
             {{ $kelass->links() }}
-        </div>
+        </div> --}}
     </div>
     @endif
 

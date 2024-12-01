@@ -7,24 +7,17 @@
     {{-- ============================== Create ================================= --}}
     @if ($page == 'index')
     <div class="row">
-        <div class="d-flex justify-content-between pb-3">
-            <div>
-                @if ($categorys->count() >= 10)
-                <label for="">Page : </label>
-                <select wire:model.live="paginate" id="">
-                    <option value="10">10</option>
-                    @if ($categorys->count() >= 20)
-                    <option value="20">20</option>
-                    @endif
-                </select>
-                @endif
-            </div>
-            <div class="right">
-                <a wire:click='$set("page", "create")' class="btn btn-primary mx-2">Create new Category</a>
+        @canany(['create category'])
+        <div class="bg-secondary d-flex justify-content-between p-2 my-2 rounded">
+            <div class="right ml-auto">
+                @can('create category')
+                <a wire:click='$set("page", "create")' class="btn btn-primary">Create new Category</a>
+                @endcan
             </div>
         </div>
+        @endcanany
         {{-- <caption>List of users staf</caption> --}}
-        <table class="table table-dark">
+        <table class="table table-dark dataTableResponsive">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -34,16 +27,22 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($categorys as $key => $category)
+                @foreach ($categorys as $key => $category)
                 <tr>
-                    <th scope="row">{{ $categorys->firstItem() + $key }}</th>
+                    <th scope="row">{{ $key + 1 }}</th>
                     <td>{{ $category->name }}</td>
                     <td>{{ $category->deskripsi }}</td>
                     <td>
+                        @can('show category')
                         <a wire:click='show({{$category->id}})' class="btn btn-info">Show</a>
+                        @endcan
+                        @can('update category')
                         <a wire:click='edit({{$category->id}})' class="btn btn-primary">Edit</a>
+                        @endcan
+                        @can('delete category')
                         <a class="btn btn-danger" data-toggle="modal"
                             data-target="#deleteCategory{{$category->id}}">Delete</a>
+                        @endcan
                     </td>
                 </tr>
 
@@ -74,16 +73,9 @@
                         </div>
                     </div>
                 </div>
-                @empty
-                <tr class="text-center">
-                    <td colspan="8">Tidak ada data terbaru.</td>
-                </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
-        <div class="text-center">
-            {{ $categorys->links() }}
-        </div>
     </div>
     @endif
 

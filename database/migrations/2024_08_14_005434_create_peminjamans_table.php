@@ -14,16 +14,19 @@ return new class extends Migration
         Schema::create('peminjamans', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('token');
-            $table->string('nama_barang');
+            $table->string('token')->unique(); // kode peminjaman
+            $table->unsignedBigInteger('barang_id');
             $table->date('tanggal_pinjam');
+            $table->string('action')->nullable();
+            $table->longText('keperluan');
+            $table->string('penanggung_jawab')->nullable();
             $table->date('tanggal_kembali')->nullable();
-            $table->string('keperluan');
-            $table->string('status_pengembalian')->nullable();
+            $table->boolean('status_pengembalian')->default(false);
             $table->string('barang_yang_dikembalikan')->nullable();
             $table->timestamps();
         
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('barang_id')->references('id')->on('barangs')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

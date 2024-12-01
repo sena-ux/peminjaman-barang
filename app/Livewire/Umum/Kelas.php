@@ -105,7 +105,7 @@ class Kelas extends Component
     public function render()
     {
         return view('livewire.umum.kelas', [
-            'kelass' => \App\Models\Kelas::latest()->paginate(intval($this->paginate)),
+            'kelass' => \App\Models\Kelas::latest()->get(),
         ]);
     }
 }

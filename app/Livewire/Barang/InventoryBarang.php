@@ -7,6 +7,7 @@ use App\Models\Barang\Kondisi_Brg;
 use App\Models\InventoryBarang as inventoryBarangModel;
 use App\Models\Ruangan;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -18,8 +19,8 @@ class InventoryBarang extends Component
 
     public $page = 'index', $paginate = 10, $dataBarang, $dataRuangan, $kondisi, $status;
 
-    public $barang, $ruangan, $kode_barang, $kondisiData, $statusData, $date, $updated_at, $inv_brg_id, $jumlah_barang, $alatKebersihan;
-    public $kondisiBarang = [];
+    public $barang, $ruangan, $kode_barang, $kondisiData, $statusData, $date, $updated_at, $inv_brg_id, $jumlah_barang, $alatKebersihan, $inventoryBarang;
+    public $kondisiBarang = [], $detail_kondisi;
 
     public function __construct()
     {
@@ -53,13 +54,14 @@ class InventoryBarang extends Component
 
     public function store()
     {
+        DB::beginTransaction();
         try {
             $this->validate([
                 'kode_barang' => 'unique:inventory_barangs',
                 'barang' => 'required',
                 'ruangan' => 'required',
             ]);
-
+            $totalBarangDitambahkan = 0;
             if ($this->alatKebersihan == false) {
                 for ($i = 1; $i <= intval($this->jumlah_barang); $i++) {
                     $inv_brg = inventoryBarangModel::create([
@@ -71,9 +73,10 @@ class InventoryBarang extends Component
                         // 'status_barang' => $this->statusData,
                         'tanggal' => $this->date
                     ]);
+                    $totalBarangDitambahkan += 1;
                 }
             } else {
-                $inv_brg = inventoryBarangModel::create([
+                inventoryBarangModel::create([
                     'id_barang' => $this->barang,
                     // 'kondisi' => $this->kondisiData,
                     'id_ruangan' => $this->ruangan,
@@ -82,15 +85,17 @@ class InventoryBarang extends Component
                     // 'status_barang' => $this->statusData,
                     'tanggal' => $this->date
                 ]);
-
+                $totalBarangDitambahkan = $this->jumlah_barang;
             }
 
-            // Kondisi_Brg::create([
-            //     'inv_brg_id' => $inv_brg->id,
-            //     'date' => $this->date,
-            //     'status_barang' => $this->statusData,
-            //     'kondisi' => $this->kondisiData,
-            // ]);
+            // $jumlahInventoryBarang = inventoryBarangModel::where('id_barang', $this->barang)->pluck("jumlah")->sum();
+            // Barang::find($this->barang)->update(['total_barang' => $jumlahInventoryBarang]);
+
+            $barang = Barang::find($this->barang);
+            $barang->increment('total_barang', $totalBarangDitambahkan);
+
+            DB::commit();
+
             toastr()->success('Inventory Barang New saved Successfully!');
             $this->clear();
             $this->page = 'create';
@@ -127,12 +132,19 @@ class InventoryBarang extends Component
             $inventory = inventoryBarangModel::find($id);
             $kondisi = Kondisi_Brg::where('inv_brg_id', $id)->get();
 
+            $jumlahBarangDihapus = $inventory->jumlah;
+
             if ($kondisi->isNotEmpty()) {
                 foreach ($kondisi as $item) {
                     $item->delete();
                 }
             }
             $inventory->delete();
+
+            $barang = Barang::find($inventory->id_barang);
+            if ($barang) {
+                $barang->decrement('total_barang', $jumlahBarangDihapus);
+            }
 
             toastr()->success("Deleted Inventory Barang Successfully.");
             $this->page = "index";
@@ -142,7 +154,67 @@ class InventoryBarang extends Component
         }
     }
 
+    public function edit($id)
+    {
+        $inventory = inventoryBarangModel::find($id);
+        $this->inventoryBarang = $inventory;
+        $this->page = 'edit';
+        $this->barang = $inventory->id_barang;
+        $this->ruangan = $inventory->id_ruangan;
+        $this->date = $inventory->tanggal;
+        $this->jumlah_barang = $inventory->jumlah;
+    }
 
+    public function update($id)
+    {
+        DB::beginTransaction();
+        try {
+            $this->validate([
+                'jumlah_barang' => 'required|numeric',
+            ]);
+
+            $inventory = inventoryBarangModel::find($id);
+            $barangLama = Barang::find($inventory->id_barang);
+
+            $totalSebelumDiupdate = $inventory->jumlah;
+
+            // Update data inventory
+            $inventory->update([
+                'id_barang' => $this->barang,
+                'id_ruangan' => $this->ruangan,
+                'jumlah' => $this->jumlah_barang,
+                'tanggal' => $this->date,
+            ]);
+            // Update total_barang di tabel Barang
+            if ($barangLama->id != $this->barang) {
+                // Kurangi total_barang dari barang lama
+                $barangLama->decrement('total_barang', $totalSebelumDiupdate);
+
+                // Tambahkan total_barang ke barang baru
+                $barangBaru = Barang::find($this->barang);
+                $barangBaru->increment('total_barang', $this->jumlah_barang);
+            } else {
+                $barangLama->decrement('total_barang', $totalSebelumDiupdate);
+                // Jika ID barang sama, hanya perbarui jumlah
+                $barangLama->increment('total_barang', $this->jumlah_barang);
+            }
+
+            DB::commit();
+
+            toastr()->success('Inventory Barang New saved Successfully!');
+            $this->clear();
+            $this->show($id);
+        } catch (\Throwable $th) {
+            toastr()->error('Validation Error: ' . $th->getMessage());
+            return redirect()->back()->withInput();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            toastr()->error('Validation Error: ' . $e->getMessage());
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch (\Exception $e) {
+            toastr()->error('Something went wrong: ' . $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+    }
 
     public function render()
     {
@@ -184,14 +256,24 @@ class InventoryBarang extends Component
     {
         $barang = Kondisi_Brg::find($kondisi_id);
 
-        if ($barang) {
+        if ($barang->images) {
             if (file_exists(public_path('uploads/kondisiBarang/' . $barang->images))) {
                 unlink(public_path('uploads/kondisiBarang/' . $barang->images));
             }
-            $barang->delete();
-            $this->kondisiBarang = Kondisi_Brg::all();
-            toastr()->success('Data berhasil dihapus.');
         }
+        $barang->delete();
+
+        $kondisi = Kondisi_Brg::where('inv_brg_id', $this->inv_brg_id)->latest()->first();
+        inventoryBarangModel::find($this->inv_brg_id)->update(['status_barang' => $kondisi->status_barang ?? null, 'kondisi' => $kondisi->kondisi ?? null]);
+        $this->kondisiBarang = Kondisi_Brg::with(['inventory'])->where('inv_brg_id', $this->inv_brg_id)->latest()->get();
+        toastr()->success('Data berhasil dihapus.');
         $this->page = 'show';
+    }
+
+    public function showDetailKondisi($id)
+    {
+        $kondisi = Kondisi_Brg::find($id);
+        $this->detail_kondisi = $kondisi->detail_kondisi;
+        $this->page = 'showDetailKondisi';
     }
 }

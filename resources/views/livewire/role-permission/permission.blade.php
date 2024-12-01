@@ -3,51 +3,57 @@
     @if ($page == 'index')
     <div class="row">
         <div class="d-flex justify-content-between pb-3">
-            <div>
-                <label for="">Page : </label>
-                <select wire:model.live="paginate" id="">
-                    <option value="1">1</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="40">40</option>
-                    <option value="60">60</option>
-                    <option value="100">100</option>
-                </select>
-            </div>
-            <div class="right">
+            {{-- <div>
+                <div>
+                    @if ($permissions->count() >= 10)
+                    <label for="">Page : </label>
+                    <select wire:model.live="paginate" id="">
+                        <option value="10">10</option>
+                        @if ($permissions->count() >= 20)
+                        <option value="20">20</option>
+                        @endif
+                    </select>
+                    @endif
+                </div>
+            </div> --}}
+            <div class="ml-auto">
                 <a wire:click='$set("page", "create")' class="btn btn-primary mx-2">Create new permission</a>
             </div>
         </div>
         <caption>List of user permissions.</caption>
-        <table class="table table-dark">
+        <table class="table table-dark dataTableResponsive">
             <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Group</th>
                     <th scope="col">Guard Name</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($permissions as $key => $permission)
+                @foreach ($permissions as $key => $permission)
                 <tr>
-                    <th scope="row">{{ $permissions->firstItem() + $key }}</th>
+                    <th scope="row">{{ $key + 1 }}</th>
                     <td>{{ $permission->name }}</td>
+                    <td>{{ $permission->group }}</td>
                     <td>{{ $permission->guard_name }}</td>
                     <td>
                         <a wire:click='show({{$permission->id}})' class="btn btn-info">Show</a>
                         <a wire:click='edit({{$permission->id}})' class="btn btn-primary">Edit</a>
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#deletepermission{{$permission->id}}">Delete {{ $permission->name }}</a>
+                        <a class="btn btn-danger" data-toggle="modal"
+                            data-target="#deletepermission{{$permission->id}}">Delete {{ $permission->name }}</a>
                     </td>
                 </tr>
-                
+
                 <!-- Modal Delete -->
-                <div class="modal fade" id="deletepermission{{$permission->id}}" tabindex="-1" aria-labelledby="deletepermissionLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="deletepermission{{$permission->id}}" tabindex="-1"
+                    aria-labelledby="deletepermissionLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title text-danger" id="deletepermissionLabel">Yakin delete permission dengan
+                                <h5 class="modal-title text-danger" id="deletepermissionLabel">Yakin delete permission
+                                    dengan
                                     Name : {{ $permission->name }}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -60,23 +66,17 @@
                                         <span class="sr-only">Loading...</span>
                                     </div>
                                     <button type="submit" class="btn btn-danger"
-                                        wire:click.prevent='delete({{$permission->id}})' data-dismiss="modal">Delete {{ $permission->name
+                                        wire:click.prevent='delete({{$permission->id}})' data-dismiss="modal">Delete {{
+                                        $permission->name
                                         }}</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @empty
-                <tr class="text-center">
-                    <td colspan="8">Tidak ada data terbaru.</td>
-                </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
-        <div class="text-center">
-            {{ $permissions->links() }}
-        </div>
     </div>
     @endif
 
@@ -91,6 +91,16 @@
             <input type="text" class="form-control @error(" name") is-invalid @enderror" id="nama_permission"
                 placeholder="Contoh : Lab Bahasa" value="{{ old('nama_permission') }}" wire:model="name" required>
             <label for="nama_permission" class="required">Nama permission</label>
+            @error('name')
+            <div class="invalid-feedback">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control @error(" name") is-invalid @enderror" id="nama_permission"
+                placeholder="Grouping name" value="{{ old('nama_permission') }}" wire:model="group" required>
+            <label for="nama_permission" class="required">Group</label>
             @error('name')
             <div class="invalid-feedback">
                 {{$message}}
@@ -130,6 +140,7 @@
             <thead>
                 <tr>
                     <th scope="col">Name</th>
+                    <th scope="col">Group</th>
                     <th scope="col">Guard Name</th>
                     <th scope="col">Action</th>
                 </tr>
@@ -137,6 +148,7 @@
             <tbody>
                 <tr>
                     <td>{{ $name }}</td>
+                    <td>{{ $group }}</td>
                     <td>{{ $guard_name }}</td>
                     <td>
                         <a wire:click='$set("page", "edit")' class="btn btn-primary">Update</a>
@@ -158,6 +170,16 @@
             <input type="text" class="form-control @error(" name") is-invalid @enderror" id="nama_permission"
                 placeholder="Contoh : Lab Bahasa" value="{{ old('name') }}" wire:model="name" required>
             <label for="nama_permission" class="required">Name</label>
+            @error('name')
+            <div class="invalid-feedback">
+                {{$message}}
+            </div>
+            @enderror
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control @error(" name") is-invalid @enderror" id="nama_permission"
+                placeholder="Grouping name" value="{{ old('nama_permission') }}" wire:model="group" required>
+            <label for="nama_permission" class="required">Group</label>
             @error('name')
             <div class="invalid-feedback">
                 {{$message}}

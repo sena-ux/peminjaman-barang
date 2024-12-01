@@ -15,7 +15,7 @@ class AdminController extends Controller
     public function index()
     {
         $data = [
-            'admins' => Admin::with(['user'])->paginate(10),
+            'admins' => Admin::with(['user'])->latest()->get(),
         ];
         return view('admin.admin.index', $data);
     }

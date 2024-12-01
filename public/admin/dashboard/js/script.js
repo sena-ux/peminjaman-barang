@@ -211,3 +211,116 @@ function toggleOtherInput(selectElement) {
         otherInput.value = '';
     }
 }
+
+if (document.querySelector('.dataTableResponsive')) {
+    new DataTable('.dataTableResponsive', {
+        responsive: true,
+    });
+}
+
+if (document.querySelectorAll('textarea') || document.querySelector('textarea')) {
+    // TinyMCE
+    tinymce.init({
+        selector: 'textarea.tinyMce.default',
+        menu: {
+            file: { title: 'File', items: 'newdocument restoredraft | preview | importword exportpdf exportword | print | deleteallconversations' },
+            edit: { title: 'Edit', items: 'undo redo | cut copy paste pastetext | selectall | searchreplace' },
+            view: { title: 'View', items: 'code revisionhistory | visualaid visualchars visualblocks | spellchecker | preview fullscreen | showcomments' },
+            insert: { title: 'Insert', items: 'image link media addcomment pageembed codesample inserttable | math | charmap emoticons hr | pagebreak nonbreaking anchor tableofcontents | insertdatetime' },
+            format: { title: 'Format', items: 'bold italic underline strikethrough superscript subscript codeformat | styles blocks fontfamily fontsize align lineheight | forecolor backcolor | language | removeformat' },
+            tools: { title: 'Tools', items: 'spellchecker spellcheckerlanguage | a11ycheck code wordcount' },
+            table: { title: 'Table', items: 'inserttable | cell row column | advtablesort | tableprops deletetable' },
+            help: { title: 'Help', items: 'help' }
+        }
+    });
+
+    tinymce.init({
+        selector: 'textarea#keterangan'
+    });
+
+    tinymce.init({
+        selector: 'textarea.tinyMce.fullAccess',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        file_picker_types: 'file image media',
+        block_unsupported_drop: false,
+        automatic_uploads: true,
+        images_upload_url: '/upload',
+        file_picker_types: 'image',
+        // file_picker_callback: function (cb, value, meta) {
+        //     var input = document.createElement('input');
+        //     input.setAttribute('type', 'file');
+        //     input.setAttribute('accept', 'image/*');
+        //     input.onchange = function () {
+        //         var file = this.files[0];
+
+        //         var reader = new FileReader();
+        //         reader.readAsDataURL(file);
+        //         reader.onload = function () {
+        //             var id = 'blobid' + (new Date()).getTime();
+        //             var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+        //             var base64 = reader.result.split(',')[1];
+        //             var blobInfo = blobCache.create(id, file, base64);
+        //             blobCache.add(blobInfo);
+        //             cb(blobInfo.blobUri(), { title: file.name });
+        //         };
+        //     };
+        //     input.click();
+        // }
+        file_picker_callback: function (cb, value, meta) {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+
+            input.onchange = function () {
+                var file = this.files[0];
+
+                var formData = new FormData();
+                formData.append('file', file);
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        cb(data.location, { title: file.name, class: 'img-fluid img-thumbnail' });
+                    })
+                    .catch(error => {
+                        console.error('Upload error:', error);
+                        alert('Failed to upload image.');
+                    });
+            };
+
+            input.click();
+        },
+        mobile: {
+            menubar: true
+        },
+        setup: function (editor) {
+            editor.on('NodeChange', function (e) {
+                editor.getBody().querySelectorAll('table').forEach(function (table) {
+                    if (!table.parentElement.classList.contains('table-responsive')) {
+                        var wrapper = document.createElement('div');
+                        wrapper.className = 'table-responsive';
+                        table.parentNode.insertBefore(wrapper, table);
+                        wrapper.appendChild(table);
+                    }
+                    table.classList.add('table', 'table-striped', 'table-bordered');
+                });
+            });
+        },
+
+    });
+}
+
+function passwordShow(password, icon) {
+    if (password.type === "password") {
+        password.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        password.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}

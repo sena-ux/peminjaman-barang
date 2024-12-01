@@ -88,7 +88,7 @@ class Sarana extends Component
     public function render()
     {
         return view('livewire.umum.sarana', [
-            'saranas' => SaranaModel::latest()->paginate(intval($this->paginate)),
+            'saranas' => SaranaModel::latest()->get(),
         ]);
     }
 }

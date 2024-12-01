@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('status_barang', ['Tersedia', 'Hilang', 'Dipinjam', 'Tidak Tersedia']);
             $table->string('kondisi');
             $table->string('keterangan')->nullable();
+            $table->longText('detail_kondisi')->nullable();
             $table->string('images')->nullable();
             $table->timestamps();
         });

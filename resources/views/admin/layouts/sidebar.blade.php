@@ -35,8 +35,8 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{ route('umum.index') }}"
-                        class="nav-link {{ Request::segment(1) == 'pengaduan' ? 'active' : '' }}">
+                    <a href="{{ route('kerusakan.index') }}"
+                        class="nav-link {{ Request::segment(2) == 'kerusakan' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-exclamation-circle"></i>
                         <p>
                             Kerusakan
@@ -139,6 +139,17 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('barangPinjam.index') }}"
+                        class="nav-link {{ Request::segment(3) == 'barangPinjam' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>
+                            Barang Pinjam
+                        </p>
+                    </a>
+                </li>
+                {{-- Barang Habis Pakai --}}
+                {{-- Barang Alat Kerbersihan --}}
                 @endrole
                 @role('superadmin|staf|admin')
                 <li class="nav-header">Master Data</li>

@@ -27,10 +27,11 @@
                 <button type="submit" class="btn btn-primary">Import</button>
             </form> --}}
 
-            <form wire:submit="save">
-                <input type="file" wire:model="photos" multiple>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="file" name="file">
              
-                @error('photos.*') <span class="error">{{ $message }}</span> @enderror
+                {{-- @error('photos.*') <span class="error">{{ $message }}</span> @enderror --}}
              
                 <button type="submit">Save photo</button>
             </form>

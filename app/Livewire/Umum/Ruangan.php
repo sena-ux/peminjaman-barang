@@ -115,7 +115,7 @@ class Ruangan extends Component
     public function render()
     {
         return view('livewire.umum.ruangan', [
-            'ruangans' => \App\Models\Ruangan::with(['kelas'])->latest()->paginate(intval($this->paginate))
+            'ruangans' => \App\Models\Ruangan::with(['kelas'])->latest()->get()
         ]);
     }
 }

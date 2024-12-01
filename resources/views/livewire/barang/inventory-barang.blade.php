@@ -54,6 +54,7 @@
                         </td>
                         <td>
                             <a wire:click='show({{$inventoryBarang->id}})' class="btn btn-info">Show</a>
+                            <a wire:click='edit({{$inventoryBarang->id}})' class="btn btn-primary">Edit</a>
                             <a class="btn btn-danger m-1" data-toggle="modal"
                                 data-target="#deleteInventoryBarang{{$inventoryBarang->id}}">Delete</a>
                         </td>
@@ -178,12 +179,76 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between">
-                <a href="{{ route(" barang.index") }}" class="btn btn-secondary">Create Barang</a>
+                <a href="{{ route("barang.index") }}" class="btn btn-secondary">Create Barang</a>
                 <div class="d-flex align-item-center">
                     <div class="spinner-border text-primary mr-2" role="status" wire:loading wire:target="store">
                         <span class="sr-only">Loading...</span>
                     </div>
                     <button type="submit" class="btn btn-primary">Create & Other Inventory Barang</button>
+                </div>
+            </div>
+        </form>
+        @endif
+
+        {{-- ======================================= Edit Inventory ============================= --}}
+        @if ($page == 'edit')
+        <div class="text-end">
+            <a wire:click='show({{$inventoryBarang->id}})' class="btn btn-secondary">Show Inventory Barang</a>
+        </div>
+        <form wire:submit.prevent='update({{$inventoryBarang->id}})'>
+            <div class="form-row">
+                <div class="col-md-6 p-2">
+                    <label for="barang" class="required">Barang</label>
+                    <select class="custom-select" wire:model="barang" id="barang" required disabled>
+                        <option value="" selected>Open this select Barang</option>
+                        <optgroup label="List Barang">
+                            @forelse ($dataBarang as $item)
+                            <option value="{{$item->id}}">{{ $item->nama_barang }}</option>
+                            @empty
+                            <option value="" disabled>No Data</option>
+                            @endforelse
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-md-6 p-2">
+                    <label for="ruangan" class="required">Ruangan</label>
+                    <select class="custom-select" wire:model="ruangan" id="ruangan" required disabled>
+                        <option value="" selected>Open this select Ruangan</option>
+                        <optgroup label="List Ruangan">
+                            @forelse ($dataRuangan as $item)
+                            <option value="{{$item->id}}">{{ $item->nama_ruangan }}</option>
+                            @empty
+                            <option value="" disabled>No Data</option>
+                            @endforelse
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="col-md-6 p-2">
+                    <label for="date">Tanggal</label>
+                    <input type="date" wire:model="date" id="date" class="form-control" placeholder="Kode Barang"
+                        aria-describedby="date" disabled>
+                </div>
+                @if ($inventoryBarang->barang->category->name == "Alat Kebersihan")
+                <div class="col-md-6 p-2" id="jumlah">
+                    <label for="jumlah_barang">Jumlah Barang</label>
+                    <input type="number" wire:model="jumlah_barang" id="jumlah_barang" class="form-control"
+                        placeholder="Masukkan Jumlah Barang" aria-describedby="jumlah_barang">
+                    <small id="jumlah_barang" class="form-text text-muted">
+                        Penting: Jika ini barang alat kebersihan seperti sapu silahkan masukkan perkelas ada berapa
+                        sapunya.
+                    </small>
+                </div>
+                @endif
+            </div>
+            <div class="d-flex justify-content-between">
+                <a wire:click='$set("page", "index")' class="btn btn-danger">Batal Update</a>
+                <div class="d-flex align-item-center">
+                    <div class="spinner-border text-primary mr-2" role="status" wire:loading>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    @if ($inventoryBarang->barang->category->name == "Alat Kebersihan")
+                    <button type="submit" class="btn btn-primary">Update Inventory Barang</button>
+                    @endif
                 </div>
             </div>
         </form>
@@ -218,9 +283,14 @@
                 </tbody>
             </table>
         </div>
+
+        {{-- ===================================== Kondisi Barang ======================================= --}}
         <div class="text-end py-2">
-            <a data-toggle="modal" data-target="#create-kondisi-barang" class="btn btn-primary">Create Kondisi
-                Barang</a>
+            <form action="{{route('kondisiBarang.create')}}" method="get">
+                <input type="hidden" value="khGshjaghfhjFHJfjhdgxjhafghfR%45Us875d7gjhgJGFYfyGUtit8&)7r87tut*&56UT^$67R^&$6FGYr&^E6iOHO:kp[oJPyUIui&ruFyifR^&e67FYUFr67e^&fuyR&^rGIUR&r87FUIr87R&Yr^hyFTfuy8as5d78gFUYRydadta7587gT7tdas6duiasir67r^Dr6srdasfrd6r67iuT78sd7asdrYR6udaidgas87d" name="cd">
+                <input type="hidden" value="{{$inv_brg_id}}" name="kv">
+                <button type="submit" class="btn btn-primary">Create Kondisi Barang</button>
+            </form>
         </div>
         <div class="table-responsive">
             <table class="table table-bordered">
@@ -229,7 +299,7 @@
                         <th scope="col">Date</th>
                         <th scope="col">Kondisi</th>
                         <th scope="col">Status Barang</th>
-                        <th scope="col">Images</th>
+                        <th scope="col">Detail Kondisi</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
@@ -240,37 +310,16 @@
                         <td class="align-middle">{{ $item->kondisi }}</td>
                         <td class="align-middle">{{ $item->status_barang }}</td>
                         <td>
-                            <a data-bs-toggle="modal" data-bs-target="#showImages{{$item->id}}">
-                                <img src="{{ asset($item->images ) }}" class="img-thumbnail"
-                                    style="width: 80px; height: 80px;" alt="Image Kondisi Barang" srcset="">
+                            <a wire:click='showDetailKondisi({{$item->id}})' class="btn btn-primary">
+                                Show Detail Barang
                             </a>
                         </td>
                         <td class="align-middle">
-                            {{-- <a class="btn btn-info m-1" data-toggle="modal"
-                                data-target="#edit-kondisi-barang">Edit</a> --}}
+                            <a class="btn btn-info m-1" href="{{route('kondisiBarang.edit', $item->id)}}">Edit</a>
                             <a class="btn btn-danger m-1" data-toggle="modal"
                                 data-target="#delete-kondisi-barang{{$item->id}}">Delete</a>
                         </td>
                     </tr>
-
-                    <!-- Modal Show Images -->
-                    <div class="modal fade" id="showImages{{$item->id}}" data-bs-backdrop="static"
-                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="showImages{{$item->id}}Label"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="showImages{{$item->id}}Label">Show Images</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <img src="{{ asset($item->images ) }}" alt="Show images"
-                                        srcset="" class="img-fluid img-thumbnail">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Modal Create Kondisi Barang -->
                     <div class="modal fade" id="delete-kondisi-barang{{$item->id}}" tabindex="-1"
@@ -299,6 +348,15 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+        @endif
+
+        @if ($page == 'showDetailKondisi')
+        <div class="text-end">
+        <a wire:click='show({{$inv_brg_id}})' class="btn btn-primary my-2 p-2">Kembali</a>
+        </div>
+        <div class="card">
+            {!! $detail_kondisi !!}
         </div>
         @endif
 

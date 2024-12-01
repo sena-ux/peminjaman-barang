@@ -30,7 +30,7 @@
                 </div>
             </div> --}}
             {{-- <caption>List of users Admin</caption> --}}
-            <table class="table table-bordered">
+            <table class="table table-bordered dataTableResponsive">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -46,7 +46,7 @@
                 <tbody>
                     @forelse ($admins as $key => $admin)
                     <tr>
-                        <th scope="row">{{ $admins->firstItem() + $key }}</th>
+                        <th scope="row">{{ $key + 1 }}</th>
                         <td>{{ $admin->name }}</td>
                         <td>{{ $admin->user->email }}</td>
                         <td>{{ $admin->user->username }}</td>
@@ -90,9 +90,6 @@
                     @endforelse
                 </tbody>
             </table>
-            <div class="text-center">
-                {{ $admins->links() }}
-            </div>
         </div>
     </div>
 </section>

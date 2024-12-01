@@ -15,34 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        // User::create([
-        //     'name' => "Sena Pernata",
-        //     'email' => "sena@gmail.com",
-        //     'password' => "password",
-        //     'alamat' => "Br. Dinas Bias",
-        //     'nisn' => "123456789",
-        //     'nis' => "4985",
-        //     'kelas' => "XII 1",
-        //     'telp' => "089271743683",
-        //     'role' => "siswa",
-        // ]);
-
-        // Barang::create([
-        //     'nama_barang' => 'Laptop ASUZ'
-        // ]);
-
-        // Barang::create([
-        //     'nama_barang' => 'Charger Laptop ASUZ'
-        // ]);
-        // $this->call(BarangSeeder::class);
-        // $this->call(BarangRKSeeder::class);
         Role::create(['name' => 'superadmin']);
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'siswa']);

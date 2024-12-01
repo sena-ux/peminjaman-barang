@@ -15,7 +15,9 @@
                 </select>
             </div>
             <div class="right">
+                @can('create role')
                 <a wire:click='$set("page", "create")' class="btn btn-primary mx-2">Create new Role</a>
+                @endcan
             </div>
         </div>
         {{-- <caption>List of users staf</caption> --}}
@@ -35,9 +37,18 @@
                     <td>{{ $role->name }}</td>
                     <td>{{ $role->guard_name }}</td>
                     <td>
+                        @can('show role')
                         <a wire:click='show({{$role->id}})' class="btn btn-info">Show</a>
+                        @endcan
+                        @can('edit role')
                         <a wire:click='edit({{$role->id}})' class="btn btn-primary">Edit</a>
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#deleterole{{$role->id}}">Delete {{ $role->name }}</a>
+                        @endcan
+                        @can('delete role')
+                        <a class="btn btn-danger" data-toggle="modal" data-target="#deleterole{{$role->id}}">Delete</a>
+                        @endcan
+                        @role('superadmin')
+                        <a href="{{route('asignToRole.edit', $role->id)}}" class="btn btn-warning">Show Permissions</a>
+                        @endrole
                     </td>
                 </tr>
                 

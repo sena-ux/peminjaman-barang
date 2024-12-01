@@ -4,10 +4,10 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#bs5-5.3.0/jq-3.7.0/jszip-3.10.1/pdfmake-0.2.7/dt-2.1.7/af-2.7.0/b-3.1.2/b-colvis-3.1.2/b-html5-3.1.2/b-print-3.1.2/cr-2.0.4/date-1.5.4/fc-5.0.2/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.0/rr-1.5.0/sc-2.4.3/sb-1.8.0/sp-2.3.2/sl-2.1.0/sr-1.4.1
+ *   https://datatables.net/download/#bs5-5.3.0/jq-3.7.0/jszip-3.10.1/pdfmake-0.2.7/dt-2.1.8/af-2.7.0/b-3.2.0/b-colvis-3.2.0/b-html5-3.2.0/b-print-3.2.0/cr-2.0.4/date-1.5.4/fc-5.0.4/fh-4.0.1/kt-2.12.1/r-3.0.3/rg-1.5.1/rr-1.5.0/sc-2.4.3/sb-1.8.1/sp-2.3.3/sl-2.1.0/sr-1.4.1
  *
  * Included libraries:
- *   Bootstrap 5 5.3.0, jQuery 3 3.7.0, JSZip 3.10.1, pdfmake 0.2.7, DataTables 2.1.7, AutoFill 2.7.0, Buttons 3.1.2, Column visibility 3.1.2, HTML5 export 3.1.2, Print view 3.1.2, ColReorder 2.0.4, DateTime 1.5.4, FixedColumns 5.0.2, FixedHeader 4.0.1, KeyTable 2.12.1, Responsive 3.0.3, RowGroup 1.5.0, RowReorder 1.5.0, Scroller 2.4.3, SearchBuilder 1.8.0, SearchPanes 2.3.2, Select 2.1.0, StateRestore 1.4.1
+ *   Bootstrap 5 5.3.0, jQuery 3 3.7.0, JSZip 3.10.1, pdfmake 0.2.7, DataTables 2.1.8, AutoFill 2.7.0, Buttons 3.2.0, Column visibility 3.2.0, HTML5 export 3.2.0, Print view 3.2.0, ColReorder 2.0.4, DateTime 1.5.4, FixedColumns 5.0.4, FixedHeader 4.0.1, KeyTable 2.12.1, Responsive 3.0.3, RowGroup 1.5.1, RowReorder 1.5.0, Scroller 2.4.3, SearchBuilder 1.8.1, SearchPanes 2.3.3, Select 2.1.0, StateRestore 1.4.1
  */
 
 @charset "UTF-8";
@@ -12790,6 +12790,11 @@ div.dt-buttons div.dropdown-menu {
 div.dt-buttons div.dropdown-menu .dt-button {
   position: relative;
 }
+div.dt-buttons div.dropdown-menu .dt-button.dropdown-toggle::after {
+  position: absolute;
+  right: 12px;
+  top: 14px;
+}
 div.dt-buttons div.dropdown-menu div.dt-button-split {
   display: flex;
   flex-direction: row;
@@ -12816,10 +12821,6 @@ div.dt-buttons div.dropdown-menu div.dt-button-split button:last-child {
 div.dt-buttons div.dropdown-menu div.dt-button-split button:last-child:hover {
   color: var(--bs-dropdown-link-hover-color);
   background-color: var(--bs-dropdown-link-hover-bg);
-}
-div.dt-buttons div.dropdown-menu div.dt-button-split button:last-child:after {
-  position: relative;
-  left: -3px;
 }
 div.dt-buttons div.dropdown-menu.fixed {
   position: fixed;
@@ -12864,10 +12865,6 @@ div.dt-buttons div.dropdown-menu.fixed > :last-child {
 }
 div.dt-buttons div.dropdown-menu.two-column > :last-child, div.dt-buttons div.dropdown-menu.three-column > :last-child, div.dt-buttons div.dropdown-menu.four-column > :last-child {
   display: block !important;
-  -webkit-column-gap: 8px;
-  -moz-column-gap: 8px;
-  -ms-column-gap: 8px;
-  -o-column-gap: 8px;
   column-gap: 8px;
 }
 div.dt-buttons div.dropdown-menu.two-column > :last-child > *, div.dt-buttons div.dropdown-menu.three-column > :last-child > *, div.dt-buttons div.dropdown-menu.four-column > :last-child > * {
@@ -13894,6 +13891,7 @@ div.dt-button-collection {
   z-index: 2002 !important;
 }
 div.dt-button-collection div.dtsb-searchBuilder {
+  box-sizing: border-box;
   padding-left: 1em !important;
   padding-right: 1em !important;
 }
@@ -14296,6 +14294,10 @@ div.dtsp-searchPane div.dataTables_wrapper {
 div.dtsp-searchPane div.dt-container div.dataTables_layout_cell,
 div.dtsp-searchPane div.dataTables_wrapper div.dataTables_layout_cell {
   padding: 0;
+}
+div.dtsp-searchPane div.dt-container div.dt-layout-row:not(.dt-layout-table),
+div.dtsp-searchPane div.dataTables_wrapper div.dt-layout-row:not(.dt-layout-table) {
+  margin: 0;
 }
 div.dtsp-searchPane div.dt-container div.dt-scroll-head,
 div.dtsp-searchPane div.dt-container div.dataTables_scrollHead,

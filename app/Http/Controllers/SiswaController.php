@@ -27,7 +27,7 @@ class SiswaController extends Controller
      */
     public function index(SiswaDataTable $dataTable)
     {
-        return $dataTable->render('admin.siswa.index');
+        return view('admin.siswa.index');
     }
 
     /**
@@ -249,9 +249,13 @@ class SiswaController extends Controller
 
             try {
                 Excel::import(new ImportDataSiswa, $file);
-                return response()->json(['data' => 'Users imported successfully.'], 201);
+                // return response()->json(['data' => 'Users imported successfully.'], 201);
+                toastr()->success("Siswa imported successfully.");
+                return redirect()->route('siswa.index');
             } catch (\Exception $ex) {
-                return response()->json(['data' => 'Error: ' . $ex->getMessage()], 400);
+                // return response()->json(['data' => 'Error: ' . $ex->getMessage()], 400);
+                toastr()->error("Terjadi kesalahan saat import siswa.". $ex->getMessage());
+                return redirect()->back()->withInput();
             }
         }
 

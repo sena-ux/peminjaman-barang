@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('alamat')->nullable();
             $table->string('no_hp')->nullable();
             $table->string('gender')->nullable();
+            $table->string('foto')->default('icon/default-people.png');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });

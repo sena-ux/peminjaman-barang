@@ -32,6 +32,7 @@
 
     <!-- Select2 JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css" rel="stylesheet">
 
     @livewireStyles
     @stack('css')
@@ -96,6 +97,7 @@
     {{-- <script src="{{ asset('admin_lte/') }}/plugins/jquery/jquery.min.js"></script> --}}
     {{-- DataTable --}}
     <script src="{{ asset('DataTables/datatables.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
     <!-- Bootstrap -->
     <script src="{{ asset('admin_lte/') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- overlayScrollbars -->

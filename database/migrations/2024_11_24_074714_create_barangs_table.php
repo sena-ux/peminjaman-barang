@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nama_barang');
             $table->string('harga')->nullable();
-            $table->string('sumber_dana');
+            $table->string('sumber_dana')->nullable();
             $table->string('foto_barang');
             $table->string('total_barang')->nullable();
-            $table->string('tahun_pengadaan');
+            $table->string('tahun_pengadaan')->nullable();
             $table->string('deskripsi')->nullable();
             $table->date('date')->nullable();
             $table->enum('jenis', ['masuk', 'keluar'])->nullable();

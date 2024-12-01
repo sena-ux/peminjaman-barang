@@ -9,10 +9,17 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\Pengaduan\InventoryRuangKelasBarangController;
 use App\Http\Controllers\Pengaduan\KerusakanUmumController;
 use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\Regulasi\BarangPinjamController;
 use App\Http\Controllers\Regulasi\PemeliharaanController;
+use App\Http\Controllers\Regulasi\PeminjamanBarangController;
+use App\Http\Controllers\RolePermission\Permission\AsignToModelController;
+use App\Http\Controllers\RolePermission\Permission\AsignToRoleController;
+use App\Http\Controllers\RolePermission\Permission\AsignToUserController;
+use App\Http\Controllers\RolePermission\PermissionController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\Tanggapan\TanggapanController;
+use App\Http\Controllers\Umum\KerusakanController;
 use App\Http\Controllers\UploadsController;
 use App\Http\Controllers\User\AdminController;
 use App\Http\Controllers\User\StafController;
@@ -34,62 +41,68 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
         Route::get('import/siswa', [SiswaController::class, 'getImport'])->name('siswa.getImport');
         Route::post('import/siswa', [SiswaController::class, 'import'])->name('siswa.import');
         Route::delete('delete/selected/siswa', [SiswaController::class, 'siswaSelected'])->name('siswa.selected');
-    });
 
+        // =================== Role Permission ========================
+        Route::get('role', function () {
+            return view('admin.role.index');
+        })->name('role.index')->middleware('role:superadmin');
+
+        Route::get('asignrole', function () {
+            return view('admin.role.asign');
+        })->name('asignrole.index')->middleware('role:superadmin');
+        Route::resource('permission', PermissionController::class)->middleware('role:superadmin');
+    });
+    // ===================== Barang ============================
     Route::middleware(['role:admin|petugas|staf|superadmin'])->group(function () {
         Route::resource('barang', BarangController::class);
+        Route::resource('barang/inventoryBarangModel/barang/inventory/kondisiBarang', KondisiBarangController::class);
         Route::resource('barang/inventoryBarangModel/barang/inventory', InventoryBarangController::class);
         Route::post('import/barang', [BarangController::class, 'importBarang'])->name('import.barang');
         Route::get('download/template/import/barang', [BarangController::class, 'templateImport'])->name('siswa.templateImport');
+        // Regulasi
+        Route::get('regulasi/pemeliharaan', [PemeliharaanController::class, 'index'])->name('pemeliharaan.index');
+        Route::post('regulasi/pemeliharaan/create', [PemeliharaanController::class, 'store'])->name('pemeliharaan.store');
+        Route::get('regulasi/pemeliharaan/create', [PemeliharaanController::class, 'create'])->name('pemeliharaan.create');
+        Route::get('regulasi/pemeliharaan/{codepem}/edit', [PemeliharaanController::class, 'edit'])->name('pemeliharaan.edit');
+        Route::post('regulasi/pemeliharaan/update/{idpem}', [PemeliharaanController::class, 'update'])->name('pemeliharaan.update');
+
+        Route::post('create-new-kondisi-barang/new', [KondisiBarangController::class, 'store'])->name('create-kondisi-barang');
+
+        Route::get('category', function () {
+            return view('admin.category.index');
+        })->name('category.index');
+
+        Route::get('ruangan', function () {
+            return view('admin.ruangan.index');
+        })->name('ruangan.index');
+
+        Route::post('ruangan/import', [RuanganController::class, "importRuangan"])->name('import.ruangan');
+
+        Route::get('kelas', function () {
+            return view('admin.kelas.index');
+        })->name('kelas.index');
+        Route::post('kelas/import', [KelasController::class, "importKelas"])->name('import.kelas');
+
+        Route::get('sarana', function () {
+            return view('admin.sarana.index');
+        })->name('sarana.index');
+
+        // Kerusakan
+        Route::resource('kerusakan', KerusakanController::class);
+        Route::resource('permission/asignToRole', AsignToRoleController::class)->middleware('role:superadmin');
+        Route::resource('permission/asignToUser', AsignToUserController::class)->middleware('role:superadmin');
+
+        // ======================== Barang Pinjam =========================
+        Route::resource('peminjaman/barangPinjam', BarangPinjamController::class);
+        Route::resource('peminjaman/barangPinjam/peminjaman/peminjamanBarang', PeminjamanBarangController::class);
     });
 
-    Route::resource('user/admin', AdminController::class);
-    Route::get('user/staf', function () {
-        return view('admin.staf.index');
-    })->name('staf.index');
-
-    Route::get('regulasi/pemeliharaan', [PemeliharaanController::class, 'index'])->name('pemeliharaan.index');
-    Route::post('regulasi/pemeliharaan/create', [PemeliharaanController::class, 'store'])->name('pemeliharaan.store');
-    Route::get('regulasi/pemeliharaan/create', [PemeliharaanController::class, 'create'])->name('pemeliharaan.create');
-    Route::get('regulasi/pemeliharaan/{codepem}/edit', [PemeliharaanController::class, 'edit'])->name('pemeliharaan.edit');
-    Route::post('regulasi/pemeliharaan/update/{idpem}', [PemeliharaanController::class, 'update'])->name('pemeliharaan.update');
-
-    Route::post('create-new-kondisi-barang/new', [KondisiBarangController::class, 'store'])->name('create-kondisi-barang');
-
-    Route::get('category', function () {
-        return view('admin.category.index');
-    })->name('category.index');
-
-    Route::get('ruangan', function () {
-        return view('admin.ruangan.index');
-    })->name('ruangan.index');
-
-    Route::post('ruangan/import', [RuanganController::class, "importRuangan"])->name('import.ruangan');
-    
-    Route::get('kelas', function () {
-        return view('admin.kelas.index');
-    })->name('kelas.index');
-    Route::post('kelas/import', [KelasController::class, "importKelas"])->name('import.kelas');
-
-    Route::get('sarana', function () {
-        return view('admin.sarana.index');
-    })->name('sarana.index');
-
-    // =================== Role Permission ========================
-    Route::get('role', function () {
-        return view('admin.role.index'); 
-    })->name('role.index');
-
-    Route::get('asignrole', function () {
-        return view('admin.role.asign'); 
-    })->name('asignrole.index');
-
-    Route::get('permission', function () {
-        return view('admin.permission.index'); 
-    })->name('permission.index');
-
-    // ======================== Barang Kelas =========================
-    
+    Route::middleware(['role:admin|superadmin'])->group(function () {
+        Route::resource('user/admin', AdminController::class);
+        Route::get('user/staf', function () {
+            return view('admin.staf.index');
+        })->name('staf.index');
+    });
 });
 
 Route::post('/upload', [UploadsController::class, 'store']);
@@ -108,7 +121,7 @@ Route::get('/', [HomeController::class, 'index'])->middleware(['auth', 'verified
 
 
 Route::get('/ujicoba', function () {
-    return view('auth/loginUjiCoba');
+    return view('admin.ujicoba');
 });
 
 Route::get('/peminjaman/barang', [PeminjamanController::class, 'index'])->name('peminjaman.barang');
