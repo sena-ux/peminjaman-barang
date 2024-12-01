@@ -152,6 +152,29 @@
         }, false)
     })
 })()
+
+// Reload saat tombol refresh di tekan
+window.addEventListener('beforeunload', function (event) {
+    // sebelum halaman di muat ulang
+    Swal.fire({
+        html: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" style="background: none; width:200px;">  <linearGradient id="a11">
+            <stop offset="0" stop-color="#2239e3" stop-opacity="0"></stop>
+            <stop offset="1" stop-color="#2239e3"></stop>
+          </linearGradient>
+          <circle fill="none" stroke="url(#a11)" stroke-width="25" stroke-linecap="round" stroke-dasharray="0 44 0 44 0 44 0 44 0 360" cx="75" cy="75" r="55" transform-origin="center">
+            <animateTransform type="rotate" attributeName="transform" calcMode="discrete" dur="2" values="360;324;288;252;216;180;144;108;72;36" repeatCount="indefinite"></animateTransform>
+          </circle>
+        </svg>`,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        willOpen: () => {
+            // Mengatur style popup agar background transparan
+            const swalContainer = Swal.getPopup();
+            swalContainer.style.background = 'transparent'; // Menghilangkan background
+            swalContainer.style.boxShadow = 'none'; // Menghilangkan bayangan
+        }
+    });
+});
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
