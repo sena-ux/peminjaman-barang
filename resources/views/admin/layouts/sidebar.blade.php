@@ -34,7 +34,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('pengaduan.index') }}" class="nav-link {{ Request::segment(2) == 'pengaduan' ? 'active' : '' }}">
+                    <a href="{{ route('umum.index') }}" class="nav-link {{ Request::segment(2) == 'pengaduan' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-exclamation-circle"></i>
                         <p>
                             Pengaduan
