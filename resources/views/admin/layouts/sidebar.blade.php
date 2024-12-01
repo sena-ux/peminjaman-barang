@@ -33,12 +33,20 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('pengaduan.index') }}" class="nav-link {{ Request::segment(2) == 'pengaduan' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-exclamation-circle"></i>
+                        <p>
+                            Pengaduan
+                        </p>
+                    </a>
+                </li>
 
                 @role('admin|petugas|staf|superadmin')
                 <li class="nav-item">
                     <a href="{{ route('kerusakan.index') }}"
-                        class="nav-link {{ Request::segment(2) == 'kerusakan' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-exclamation-circle"></i>
+                    class="nav-link {{ Request::segment(2) == 'kerusakan' ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-exclamation-circle"></i>
                         <p>
                             Kerusakan
                             {{-- <i class="fas fa-angle-left right"></i> --}}
@@ -67,7 +75,7 @@
                         {{--
                     </ul> --}}
                 </li>
-                
+
                 <li class="nav-header">Umum</li>
                 <li class="nav-item">
                     <a href="{{ route('kelas.index') }}"
