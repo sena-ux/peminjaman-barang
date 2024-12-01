@@ -34,6 +34,7 @@
                     </a>
                 </li>
 
+                @role('admin|petugas|staf|superadmin')
                 <li class="nav-item">
                     <a href="{{ route('kerusakan.index') }}"
                         class="nav-link {{ Request::segment(2) == 'kerusakan' ? 'active' : '' }}">
@@ -66,8 +67,7 @@
                         {{--
                     </ul> --}}
                 </li>
-
-                @role('admin|petugas|staf|superadmin')
+                
                 <li class="nav-header">Umum</li>
                 <li class="nav-item">
                     <a href="{{ route('kelas.index') }}"
