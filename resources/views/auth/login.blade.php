@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ asset('admin_lte/plugins/sweetalert2/sweetalert2.min.css') }}">
     <style>
         body,
         * {
@@ -115,6 +116,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('admin_lte/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script>
         const passwordInput = document.getElementById('exampleInputPassword1');
         const eyeIcon = document.querySelector('.password .icon i');
