@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('kode_barang')->unique();
             $table->integer('jumlah')->nullable();
             $table->date('tanggal');
+            $table->longText('keterangan')->nullable();
             $table->unsignedBigInteger('id_barang'); 
             $table->unsignedBigInteger('id_ruangan');
             $table->timestamps();

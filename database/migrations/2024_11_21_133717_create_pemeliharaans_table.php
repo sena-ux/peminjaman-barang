@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('pemeliharaans', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('sarana_id');
-            $table->string('kode_barang')->nullable()->unique();
+            $table->string('barang')->nullable()->unique();
             $table->string('jenis_pemeliharaan');
+            $table->string('category');
             $table->string('kode_pemeliharaan')->unique();
             $table->string('penanggung_jawab');
             $table->string('tanggal_mulai')->nullable();

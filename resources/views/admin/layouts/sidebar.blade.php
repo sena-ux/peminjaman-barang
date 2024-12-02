@@ -1,5 +1,5 @@
 <aside class="main-sidebar sidebar-light-primary elevation-4 overflow-auto pb-4"
-    style="scrollbar-width: none; max-height: 100vh; overflow: auto;" id="navbarDekstop">
+    style="max-height: 100vh; overflow: auto;" id="navbarDekstop">
     <!-- Brand Logo -->
     <a href="{{ route('home') }}" class="text-dark p-3">
         <div class="row d-flex flex-row justify-content-center">

@@ -31,14 +31,14 @@ class PemeliharaanController extends Controller
                 'sarana_id' => 'required|string',
                 'kode_barang' => '',
                 'jenis_pemeliharaan' => 'required|string',
-                'tanggal_mulai' => 'required|date',
-                'tanggal_selesai' => 'required|date',
-                'biaya' => 'required|string|max:255',
-                'sumber_dana' => 'required|string|max:255',
+                'tanggal_mulai' => 'date',
+                'tanggal_selesai' => 'date',
+                'biaya' => 'string|max:255',
+                'sumber_dana' => 'string|max:255',
                 'penanggung_jawab' => 'required|string',
                 'kondisi_sebelum' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'kondisi_sesudah' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'dokumen_pendukung' => 'required|string',
+                'kondisi_sesudah' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+                'dokumen_pendukung' => 'string',
             ]);
 
             $uploadPath = 'uploads/regulasi/pemeliharaan';

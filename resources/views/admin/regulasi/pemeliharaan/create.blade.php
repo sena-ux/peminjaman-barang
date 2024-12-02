@@ -79,11 +79,11 @@
                         @enderror
                     </div>
                     <div class="form-group mb-3 col-md-6">
-                        <label for="kode_barang">Kode Barang</label>
+                        <label for="kode_barang">Barang</label>
                         <input type="text" class="form-control" id="kode_barang" aria-describedby="kode_barangHelp"
                             placeholder="Inputkan Kode Barang." name="kode_barang">
                         <small id="kode_barangHelp" class="form-text text-muted">Note : Jika ini pemeliharaan barang
-                            seperti : AC, Speaker, Kabel DLL silahkan masukkan kode barang tersebut.</small>
+                            seperti : AC, Speaker, Kabel DLL silahkan masukkan kode barang / nama barang nya jika bersifat global tersebut.</small>
                         @error('kode_barang')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -109,12 +109,20 @@
                         </div>
                     </div>
                     <div class="form-group mb-3 col-md-6">
-                        <label for="tanggal_mulai" class="required">Tanggal Mulai</label>
-                        <input type="date" class="form-control" id="tanggal_mulai" aria-describedby="dateHelp"
-                            placeholder="Inputkan tanggal mulai pemeliharaan." name="tanggal_mulai" required>
-                        <small id="dateHelp" class="form-text text-muted">Silahkan inputkan tanggal awal mulai
-                            pemeliharaan.</small>
-                        @error('tanggal_mulai')
+                        <label for="jenis" class="required">Category Pemeliharaan</label>
+                        <select name="category" id="" class="form-control" id="nama" aria-describedby="nameSaranaHelp"
+                            placeholder="Silahkan pilih sarana terlebih dahulu." required>
+                            <option value="" selected>Select Category</option>
+                            <optgroup label="Category yang tersedia">
+                                <option value="Umum">Umum</option>
+                                <option value="Semester">Semester</option>
+                                <option value="Triwulan">Triwulan</option>
+                                <option value="Harian">Harian</option>
+                            </optgroup>
+                        </select>
+                        <small id="namePemeliharaanHelp" class="form-text text-muted">Silahkan Select Category
+                            Pemeliharaan.</small>
+                        @error('jenis_pemeliharaan')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
@@ -123,22 +131,43 @@
                             Field wajib diisi.
                         </div>
                     </div>
-                    <div class="form-group mb-3 col-md-6">
-                        <label for="tanggal_selesai" class="required">Tanggal Selesai</label>
-                        <input type="date" class="form-control" id="tanggal_selesai" aria-describedby="dateHelp"
-                            placeholder="Inputkan tanggal selesai pemeliharaan." name="tanggal_selesai" required>
-                        <small id="dateHelp" class="form-text text-muted">Silahkan inputkan tanggal selesai
-                            pemeliharaan.</small>
-                        @error('date')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
-                        <div class="invalid-feedback">
-                            Field wajib diisi.
+                    <div class="col md 6 mb-3">
+                        <div class="row">
+                            <label for="">Periode</label>
+                            <div class="form-group mb-3 col-md-6">
+                                <label for="tanggal_mulai" class="required">Tanggal Mulai</label>
+                                <input type="date" class="form-control" id="tanggal_mulai" aria-describedby="dateHelp"
+                                    placeholder="Inputkan tanggal mulai pemeliharaan." name="tanggal_mulai" required>
+                                <small id="dateHelp" class="form-text text-muted">Silahkan inputkan tanggal awal mulai
+                                    pemeliharaan.</small>
+                                @error('tanggal_mulai')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                                <div class="invalid-feedback">
+                                    Field wajib diisi.
+                                </div>
+                            </div>
+                            <div class="form-group mb-3 col-md-6">
+                                <label for="tanggal_selesai" class="required">Tanggal Selesai</label>
+                                <input type="date" class="form-control" id="tanggal_selesai" aria-describedby="dateHelp"
+                                    placeholder="Inputkan tanggal selesai pemeliharaan." name="tanggal_selesai" required>
+                                <small id="dateHelp" class="form-text text-muted">Silahkan inputkan tanggal selesai
+                                    pemeliharaan.</small>
+                                @error('date')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                                <div class="invalid-feedback">
+                                    Field wajib diisi.
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+
+                    {{-- <div class="col-md-6">
                         <label for="biaya" class="required">Biaya</label>
                         <div class="input-group mb-3">
                             <span class="input-group-text">Rp.</span>
@@ -157,8 +186,9 @@
                         </div>
 
                         <input type="hidden" id="biayaHidden" name="biaya">
-                    </div>
-                    <div class="form-group mb-3 col-md-6">
+                    </div> --}}
+
+                    {{-- <div class="form-group mb-3 col-md-6">
                         <label for="sumberDana" class="required">Sumber Dana</label>
                         <input type="text" class="form-control" id="sumberDana" aria-describedby="sumberdanaHelp"
                             name="sumber_dana" required>
@@ -171,7 +201,8 @@
                         <div class="invalid-feedback">
                             Field wajib diisi.
                         </div>
-                    </div>
+                    </div> --}}
+
                     <div class="form-group mb-3 col-md-6">
                         <label for="penanggung_jawab" class="required">Penanggung Jawab</label>
                         <input type="text" class="form-control" id="penanggung_jawab"
@@ -187,7 +218,7 @@
                             Field wajib diisi.
                         </div>
                     </div>
-                    <div class="form-group mb-3 col-md-6">
+                    {{-- <div class="form-group mb-3 col-md-6">
                         <label for="kondisi_sebelum" class="required">Foto Sebelum</label>
                         <input type="file" class="form-control" id="kondisi_sebelum"
                             aria-describedby="kondisi_sebelumHelp" name="kondisi_sebelum" required>
@@ -216,7 +247,7 @@
                         <div class="invalid-feedback">
                             Field wajib diisi.
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-group mb-3 col-md-12">
                         <label for="dokumen-pendukung" class="required">Dokumen Pendukung Lainnya</label>
                         <textarea name="dokumen_pendukung" cols="30" rows="10"
