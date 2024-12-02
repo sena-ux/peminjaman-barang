@@ -17,7 +17,15 @@ return new class extends Migration
             $table->string('nip');
             $table->string('name');
             $table->string('no_hp')->nullable();
+            $table->string('status')->default('guru wali')->nullable();
+            $table->unsignedBigInteger('wali_kelas')->nullable();
+            $table->string('alamat')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('instansi')->default('SMAN 2 Amlapura');
+            $table->string('foto')->default('icon/default-people.png');
+            
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('wali_kelas')->references('id')->on('kelas');
             $table->timestamps();
         });
     }

@@ -16,9 +16,14 @@ return new class extends Migration
             $table->string('nama_barang');
             $table->string('harga')->nullable();
             $table->string('sumber_dana')->nullable();
-            $table->string('foto_barang');
+            $table->string('no_seri_pubrik')->nullable();
+            $table->string('ukuran')->nullable();
+            $table->string('bahan')->nullable();
+            $table->string('kode_barang')->nullable();
+            $table->string('foto_barang')->nullable();
             $table->string('total_barang')->nullable();
             $table->string('tahun_pengadaan')->nullable();
+            $table->string('satuan')->nullable();
             $table->string('deskripsi')->nullable();
             $table->date('date')->nullable();
             $table->enum('jenis', ['masuk', 'keluar'])->nullable();
