@@ -7,7 +7,7 @@ use App\Exports\TemplateImportDataBarang;
 use App\Exports\TemplateSiswaImport;
 use App\Imports\ImportDataBarang;
 use App\Models\Amount;
-use App\Models\Barang;
+use App\Models\Barang\Barang;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;

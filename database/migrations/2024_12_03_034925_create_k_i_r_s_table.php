@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('wali_id')->nullable();
             $table->unsignedBigInteger('setting_id');
             $table->unsignedBigInteger('riwayat_id')->nullable();
+            $table->integer('jumlah_barang');
 
             $table->foreign('barang_id')->references('id')->on('barangs')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('siswa_id')->references('id')->on('siswas')->onDelete('cascade')->onUpdate('cascade');

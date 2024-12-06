@@ -217,7 +217,6 @@ if (document.querySelector('.dataTableResponsive')) {
         responsive: true,
     });
 }
-
 if (document.querySelectorAll('textarea') || document.querySelector('textarea')) {
     // TinyMCE
     tinymce.init({

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\user\Admin;
 use App\Models\user\Staff;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -14,7 +15,7 @@ class Staf extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
     public $page = 'index';
-    public $gender, $email, $username, $no_hp, $alamat, $nip, $jenis_staf, $instansi = 'SMAN 2 Amlapura', $name, $password, $password_confirmation;
+    public $gender, $email, $username, $no_hp, $alamat, $nip, $jenis_staf, $instansi = 'SMAN 2 Amlapura', $name, $password, $password_confirmation, $wali_kelas;
     public $idstaf, $iduser;
     public $paginate = 10;
     public function create()
@@ -75,7 +76,8 @@ class Staf extends Component
             Staff::create([
                 'user_id' => $user->id,
                 'name' => $this->name,
-                'jenis_staff' => $this->jenis_staf,
+                'jenis_staff' => Str::lower($this->jenis_staf),
+                'wali_kelas' => $this->wali_kelas ?? null,
                 'instansi' => $this->instansi,
                 'no_hp' => $this->no_hp,
                 'alamat' => $this->alamat,

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('tahun_pengadaan')->nullable();
             $table->string('satuan')->nullable();
             $table->string('deskripsi')->nullable();
-            $table->date('date')->nullable();
+            $table->string('tahun_register')->nullable();
             $table->enum('jenis', ['masuk', 'keluar'])->nullable();
             $table->unsignedBigInteger('id_category');
             $table->foreign('id_category')->references('id')->on('categories')->onDelete('cascade');

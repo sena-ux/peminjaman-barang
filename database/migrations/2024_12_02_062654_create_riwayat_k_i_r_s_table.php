@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('kondisi');
             $table->string('status');
-            $table->boolean('pindah');
-            $table->string('keterangan');
+            $table->integer('jumlah_barang')->nullable();
+            $table->boolean('pindah')->nullable();
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

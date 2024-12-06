@@ -159,6 +159,18 @@
                     <label for="jenis_staf" class="required">Profesi / Jabatan / Jenis Staf / Bidang</label>
                 </div>
                 <div class="form-floating mb-3">
+                        <select name="wali_kelas" id="wali_kelas" wire:model="wali_kelas" class="form-control">
+                            <option value="">Select Kelas</option>
+                            @forelse (\App\Models\Kelas::all() as $item)
+                                <option value="{{$item->id}}">{{$item->name}}</option>
+                            @empty
+                                <option value="" disabled>Data Kelas Kosong</option>
+                            @endforelse
+                        </select>
+                    <label for="wali_kelas">Wali Kelas</label>
+                    <small>Hanya di isi jika status sebagai Wali Kelas.</small>
+                </div>
+                <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="instansi" placeholder="Jabatan" wire:model="instansi"
                         id="instansi" required>
                     <label for="instansi" class="required">Asal Sekolah / Instansi</label>

@@ -79,7 +79,8 @@ class Role extends Component
     public function render()
     {
         return view('livewire.role-permission.role', [
-            'roles' => RoleModel::where('name', '!=', 'superadmin')->paginate($this->paginate),
+            // 'roles' => RoleModel::where('name', '!=', 'superadmin')->paginate($this->paginate),
+            'roles' => RoleModel::paginate($this->paginate),
         ]);
     }
 }

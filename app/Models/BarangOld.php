@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Barang extends Model
+class BarangOld extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];

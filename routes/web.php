@@ -10,6 +10,7 @@ use App\Http\Controllers\Pengaduan\InventoryRuangKelasBarangController;
 use App\Http\Controllers\Pengaduan\KerusakanUmumController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\Regulasi\BarangPinjamController;
+use App\Http\Controllers\Regulasi\InventarisController;
 use App\Http\Controllers\Regulasi\PemeliharaanController;
 use App\Http\Controllers\Regulasi\PeminjamanBarangController;
 use App\Http\Controllers\RolePermission\Permission\AsignToModelController;
@@ -95,6 +96,11 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
         // ======================== Barang Pinjam =========================
         Route::resource('peminjaman/barangPinjam', BarangPinjamController::class);
         Route::resource('peminjaman/barangPinjam/peminjaman/peminjamanBarang', PeminjamanBarangController::class);
+
+
+        // =================== Inventaris Ruangan =========================
+        Route::get('inventaris/ruangan', [InventarisController::class, 'ruangan'])->name('inventaris.ruangan');
+        Route::get('inventaris/ruangan/insert/barang', [InventarisController::class, 'insertBarang'])->name('inventaris.insertBarang');
     });
 
     Route::middleware(['role:admin|superadmin'])->group(function () {

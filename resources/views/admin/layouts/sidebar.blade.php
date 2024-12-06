@@ -115,13 +115,13 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('inventory.index') }}"
                         class="nav-link {{ Request::segment(3) == 'inventoryBarangModel' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-box"></i>
                         <p>Inventory Barang</p>
                     </a>
-                </li>
+                </li> --}}
                 {{-- <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
@@ -144,6 +144,15 @@
                         <p>
                             Pemeliharaan
                             {{-- <i class="fas fa-angle-left right"></i> --}}
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('inventaris.ruangan') }}"
+                        class="nav-link {{ Request::segment(2) == 'inventaris' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>
+                            Inventaris
                         </p>
                     </a>
                 </li>
