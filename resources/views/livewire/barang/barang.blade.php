@@ -19,9 +19,9 @@
                         <th scope="col">#</th>
                         <th scope="col">Nama Barang</th>
                         <th scope="col">Category</th>
-                        {{-- <th scope="col">Sumber Dana</th>
+                        <th scope="col">Sumber Dana</th>
                         <th scope="col">Tahun Pengadaan</th>
-                        <th scope="col">Deskripsi</th> --}}
+                        <th scope="col">Kode Barang</th>
                         <th scope="col">Total Barang</th>
                         <th scope="col">Foto Barang</th>
                         <th scope="col">Action</th>
@@ -33,9 +33,9 @@
                         <th class="align-middle" scope="row">{{ $key + 1 }}</th>
                         <td class="align-middle">{{ $barang->nama_barang }}</td>
                         <td class="align-middle">{{ $barang->category->name }}</td>
-                        {{-- <td class="align-middle">{{ $barang->sumber_dana }}</td>
+                        <td class="align-middle">{{ $barang->sumber_dana }}</td>
                         <td class="align-middle">{{ $barang->tahun_pengadaan }}</td>
-                        <td class="align-middle">{{ $barang->deskripsi }}</td> --}}
+                        <td class="align-middle">{{ $barang->kode_barang }}</td>
                         <td class="align-middle">{{ $barang->total_barang }}</td>
                         <td>
                             <a data-toggle="modal" data-target="#showImage{{$barang->id}}" class="btn btn-info">View

@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Barang;
 
-use App\Models\Barang;
+use App\Models\Barang\Barang;
 use App\Models\Barang\Kondisi_Brg;
 use App\Models\InventoryBarang as inventoryBarangModel;
 use App\Models\Ruangan;

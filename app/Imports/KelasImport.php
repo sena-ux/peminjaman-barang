@@ -43,6 +43,7 @@ class KelasImport implements ToModel, WithProgressBar, WithHeadingRow, WithBatch
                 [
                     'lokasi' => $row['keterangan'],
                     'id_kelas' => $kelas->id,
+                    'kode_ruangan' => $this->generateKode()
                 ]
             );
 
@@ -98,5 +99,21 @@ class KelasImport implements ToModel, WithProgressBar, WithHeadingRow, WithBatch
             'attribute' => $failure->attribute(),
             'error' => $failure->errors(),
         ];
+    }
+
+    private function generateKode()
+    {
+        $prefix = 'RG';
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $length = 1;
+
+        do {
+            $randomString = substr(str_shuffle(str_repeat($characters, $length)), 0, $length);
+            // $kodeBarang = $prefix . '-' . uniqid() . $randomString;
+            $kode = $prefix . '-' . substr(bin2hex(random_bytes(3)), 0, 3) . $randomString;
+            $exists = Ruangan::where('kode_ruangan', $kode)->exists();
+        } while ($exists);
+
+        return $kode;
     }
 }

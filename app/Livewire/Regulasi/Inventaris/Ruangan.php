@@ -11,23 +11,50 @@ use App\Models\Siswa;
 use App\Models\Umum\RiwayatKIR;
 use App\Models\Umum\Setting;
 use App\Models\user\Staff;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class Ruangan extends Component
 {
-    public $page = 'index';
+    public $page = 'index', $insertBarangPage = 'hide', $duplikat = 'false';
 
     public $id_Ruangan, $ruangan;
 
     public $ruangan_id, $nama_barang, $kode_barang, $sumber_dana,
     $tahun_pengadaan, $seri_pubrik, $ukuran, $bahan, $harga_barang,
     $tahun_register, $category, $deskripsi, $total_barang, $baik,
-    $kurang_baik, $rusak_berat, $satuan;
+    $kurang_baik, $rusak_berat, $satuan, $barang_id, $kode_barang_search, $foto_barang;
 
+    public function clear()
+    {
+        $this->insertBarangPage = 'hide';
+        $this->duplikat = 'false';
+        // $this->ruangan_id ="";
+        // $this->nama_barang ="";
+        // $this->kode_barang ="";
+        // $this->sumber_dana ="";
+        // $this->tahun_pengadaan ="";
+        // $this->tahun_register ="";
+        // $this->seri_pubrik ="";
+        // $this->ukuran ="";
+        // $this->bahan ="";
+        // $this->harga_barang ="";
+        // $this->category ="";
+        // $this->deskripsi ="";
+        // $this->total_barang ="";
+        // $this->baik ="";
+        // $this->kurang_baik ="";
+        // $this->rusak_berat ="";
+        // $this->satuan ="";
+        // $this->barang_id ="";
+        // $this->kode_barang_search ="";
+        // $this->foto_barang ="";
+    }
     public function render()
     {
         $data = [
-            'ruangans' => \App\Models\Ruangan::with(['kelas'])->latest()->get(),
+            'ruangans' => RuanganModel::with(['kelas', 'kir'])->latest()->get(),
         ];
         return view('livewire.regulasi.inventaris.ruangan', $data);
     }
@@ -44,54 +71,56 @@ class Ruangan extends Component
         try {
             $this->validate([
                 'nama_barang' => 'required|string',
-                'kode_barang' => 'required|string',
+                'kode_barang' => 'required|string|min:5|max:255',
                 'sumber_dana' => 'required|string',
                 'tahun_pengadaan' => 'required|integer|min:1000|max:5000',
-                'seri_pubrik' => 'string',
-                'ukuran' => 'string',
-                'bahan' => 'string',
-                'harga_barang' => '',
-                'tahun_register' => 'integer|min:1000|max:5000',
-                'category' => 'string',
+                'seri_pubrik' => 'nullable|string',
+                'ukuran' => 'nullable|string',
+                'bahan' => 'nullable|string',
+                'harga_barang' => 'nullable|numeric',
+                'tahun_register' => 'nullable|integer|min:1000|max:5000',
+                'category' => 'nullable|string',
                 'total_barang' => 'required|integer',
-                'baik' => 'integer',
-                'kurang_baik' => 'integer',
-                'rusak_berat' => 'integer',
+                'baik' => 'nullable|integer',
+                'kurang_baik' => 'nullable|integer',
+                'rusak_berat' => 'nullable|integer',
             ]);
 
-            $validasi = false;
+            $totalBarang = intval($this->total_barang);
+            $baik = intval($this->baik ?? 0);
+            $kurangBaik = intval($this->kurang_baik ?? 0);
+            $rusakBerat = intval($this->rusak_berat ?? 0);
 
-            if (intval($this->total_barang) != (intval($this->baik) + intval($this->kurang_baik) + intval($this->rusak_berat))) {
+            if ($totalBarang != ($baik + $kurangBaik + $rusakBerat)) {
                 toastr()->error('Jumlah total barang tidak sinkron.');
-                $validasi = false;
-            } else {
-                $validasi = true;
+                return;
             }
 
-            if ($validasi) {
-                $ruangan = RuanganModel::with('kelas')->find($this->id_Ruangan);
-                $category = Category::createOrFirst(
-                    ['name' => $this->category]
-                );
+            $ruangan = RuanganModel::with('kelas')->find($this->id_Ruangan);
+            if (!$ruangan) {
+                toastr()->error('Ruangan tidak ditemukan.');
+                return;
+            }
 
-                $ketuaKelas = Siswa::where([
-                    'kelas_id' => $ruangan->kelas_id,
-                    'status' => 'ketua kelas',
-                ])->first();
+            $category = Category::firstOrCreate(['name' => $this->category]);
 
-                $kepalaSekolah = Staff::where('jenis_staff', 'kepala sekolah')->first();
+            $ketuaKelas = Siswa::where([
+                'kelas_id' => $ruangan->kelas_id,
+                'status' => 'ketua kelas',
+            ])->first();
 
-                $pengelolaBDM = Staff::where('jenis_staff', 'pengelola bdm')->first();
+            $kepalaSekolah = Staff::where('jenis_staff', 'kepala sekolah')->first();
+            $pengelolaBDM = Staff::where('jenis_staff', 'pengelola bdm')->first();
+            $waliKelas = Staff::where([
+                'jenis_staff' => 'wali kelas',
+                'wali_kelas' => $ruangan->kelas_id,
+            ])->first();
 
-                $waliKelas = Staff::where([
-                    'jenis_staff' => 'wali kelas',
-                    'wali_kelas' => $ruangan->kelas_id
-                ])->first();
+            $setting = Setting::where('status', true)->first();
 
-                $setting = Setting::where('status', true)->first();
-
-
-                $barang = Barang::create([
+            $barang = Barang::updateOrCreate(
+                ['kode_barang' => $this->kode_barang],
+                [
                     'nama_barang' => $this->nama_barang,
                     'harga' => $this->harga_barang,
                     'sumber_dana' => $this->sumber_dana,
@@ -104,42 +133,135 @@ class Ruangan extends Component
                     'satuan' => $this->satuan,
                     'deskripsi' => $this->deskripsi,
                     'id_category' => $category->id,
-                ]);
+                    'merk' => $this->merk,
+                ]
+            );
 
-                Barang::where('kode_barang', $this->kode_barang)
-                    ->increment('total_barang', $this->total_barang);
-
-                $kir = KIR::create([
-                    'barang_id' => $barang->id,
-                    'siswa_id' => $ketuaKelas->id ?? null,
-                    'ruangan_id' => $ruangan->id,
-                    'kepala_sekolah_id' => $kepalaSekolah->id ?? null,
-                    'pengelola_id' => $pengelolaBDM->id ?? null,
-                    'wali_id' => $waliKelas->id ?? null,
-                    'setting_id' => $setting->id,
-                    'jumlah_barang' => $this->total_barang,
-                ]);
-
-                RiwayatKIR::create([
-                    'kondisi' => ($this->kurang_baik ? 'bagus' : 'no kondisi'),
-                    'status' => ($this->total_barang ? 'tersedia' : 'no status'),
-                    'jumlah' => $this->total_barang,
-                    'bagus' => $this->baik,
-                    'kurang_bagus' => $this->kurang_baik,
-                    'rusak_berat' => $this->rusak_berat,
-                    'date' => now()->toDateString(),
-                ]);
-
-                $riwayat = RiwayatKIR::where('kir_id', $kir->id)->latest()->first();
-
-                KIR::find($kir->id)->update([
-                    'riwayat_id' => $riwayat->id,
-                ]);
+            if ($this->duplikat == "update") {
+                Barang::find($barang->id)->decrement('total_barang', $totalBarang)
+                    ->increment('total_barang', $totalBarang);
+            } else {
+                Barang::find($barang->id)
+                    ->increment('total_barang', $totalBarang);
             }
-            toastr()->success('Barang telah di tambahkan ke ruangan silahkan periksa perubahan.');
-            $this->page = "index";
+
+            $kir = KIR::create([
+                'barang_id' => $barang->id,
+                'siswa_id' => $ketuaKelas->id ?? null,
+                'ruangan_id' => $ruangan->id,
+                'kepala_sekolah_id' => $kepalaSekolah->id ?? null,
+                'pengelola_id' => $pengelolaBDM->id ?? null,
+                'wali_id' => $waliKelas->id ?? null,
+                'setting_id' => $setting->id,
+                'jumlah_barang' => $totalBarang,
+                'kode_kir' => $this->generateKode(),
+            ]);
+
+            $riwayat = RiwayatKIR::create([
+                'kondisi' => $baik > 0 ? 'bagus' : ($kurangBaik > 0 ? 'kurang bagus' : 'rusak berat'),
+                'status' => $totalBarang > 0 ? 'tersedia' : 'tidak tersedia',
+                'jumlah' => $totalBarang,
+                'bagus' => $baik,
+                'kurang_bagus' => $kurangBaik,
+                'rusak_berat' => $rusakBerat,
+                'kir_id' => $kir->id,
+                'date' => now()->toDateString(),
+            ]);
+
+            $kir->update(['riwayat_id' => $riwayat->id]);
+            $this->barang_id = $barang->id;
+
+            $this->foto_barang = $barang->foto_barang;
+
+            toastr()->success('Barang telah ditambahkan ke ruangan. Silakan periksa perubahan.');
+            if ($barang->foto_barang) {
+                $this->page = 'index';
+            } else {
+                $this->page = "insertImageForNewBarang";
+            }
         } catch (\Throwable $th) {
-            toastr()->error('Kesalahan : ' . $th->getMessage());
+            toastr()->error('Kesalahan: ' . $th->getMessage());
+        }
+
+    }
+
+    public function searchBarang()
+    {
+        if ($this->kode_barang_search) {
+            $barang = Barang::with('category')->where('kode_barang', $this->kode_barang_search)->latest()->get()->first();
+            if ($barang) {
+                $kir = KIR::with(['riwayat'])->where('barang_id', $barang->id)->latest()->get()->first();
+                if ($kir) {
+                    $this->duplikat = "true";
+                    $this->total_barang = $kir->riwayat->jumlah;
+                    $this->baik = $kir->riwayat->bagus;
+                    $this->kurang_baik = $kir->riwayat->kurang_bagus;
+                    $this->rusak_berat = $kir->riwayat->rusak_berat;
+                } else {
+                    $this->duplikat = "create";
+                }
+                toastr()->success('Data barang telah di temukan...');
+                $this->nama_barang = $barang->nama_barang;
+                $this->kode_barang = $barang->kode_barang;
+                $this->sumber_dana = $barang->sumber_dana;
+                $this->tahun_pengadaan = $barang->tahun_pengadaan;
+                $this->seri_pubrik = $barang->no_seri_pubrik;
+                $this->ukuran = $barang->ukuran;
+                $this->satuan = $barang->satuan;
+                $this->bahan = $barang->bahan;
+                $this->harga_barang = intval($barang->harga);
+                $this->tahun_register = $barang->tahun_register;
+                $this->category = $barang->category->name;
+                $this->deskripsi = $barang->deskripsi;
+                $this->insertBarangPage = 'show';
+            } else {
+                toastr()->info('Data barang tidak ditemukan...');
+                $this->insertBarangPage = 'show';
+                $this->duplikat = "create";
+                $this->kode_barang = $this->kode_barang_search;
+            }
+        } else {
+            toastr()->error('Kode barang tidak boleh kosong!');
         }
     }
+
+    public function cetak_kartu($id)
+    {
+        try {
+            $data = [
+                'kir' => KIR::with(['barang', 'riwayat'])->where("ruangan_id", $id)->latest()->get(),
+                'kir_one' => KIR::with(['siswa', 'ruangan', 'kepala_sekolah', 'pengelola', 'wali', 'setting', 'riwayat'])->where("ruangan_id", $id)->latest()->get()->first(),
+            ];
+
+            $pdf = Pdf::loadView('admin.regulasi.inventaris.cetak_kir', $data);
+            return $pdf->download('Kartu-Inventaris-Ruangan.pdf');
+            // toastr()->success("Cetak Kartu Inventaris Ruangan berhasil.");
+        } catch (\Throwable $th) {
+            toastr()->error("Kesalahan : " . $th->getMessage());
+        }
+    }
+
+    public function update()
+    {
+        $this->insertBarangPage = 'show';
+        $this->duplikat = "update";
+    }
+
+    private function generateKode()
+    {
+        $prefix = 'KIR';
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $length = 1;
+
+        do {
+            $randomString = substr(str_shuffle(str_repeat($characters, $length)), 0, $length);
+            // $kodeBarang = $prefix . '-' . uniqid() . $randomString;
+            $kodeBarang = $prefix . '-' . substr(bin2hex(random_bytes(3)), 0, 3) . $randomString;
+            $exists = KIR::where('kode_kir', $kodeBarang)->exists();
+        } while ($exists);
+
+        return $kodeBarang;
+    }
+
+
 }

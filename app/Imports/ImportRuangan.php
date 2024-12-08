@@ -22,7 +22,7 @@ class ImportRuangan implements ToModel, WithBatchInserts, WithHeadingRow, WithSk
         try {
             $ruangan = Ruangan::updateOrCreate(
                 ['nama_ruangan' => $row['nama_ruangan']],
-                ['nama_ruangan' => $row['nama_ruangan'], 'lokasi' => $row['lokasi'], 'id_kelas' => null]
+                ['nama_ruangan' => $row['nama_ruangan'], 'lokasi' => $row['lokasi'], 'id_kelas' => null, 'kode_ruangan' => $this->generateKode()]
             );
 
             $this->successCount++;
@@ -75,5 +75,21 @@ class ImportRuangan implements ToModel, WithBatchInserts, WithHeadingRow, WithSk
             'attribute' => $failure->attribute(),
             'error' => $failure->errors(),
         ];
+    }
+
+    private function generateKode()
+    {
+        $prefix = 'RG';
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $length = 1;
+
+        do {
+            $randomString = substr(str_shuffle(str_repeat($characters, $length)), 0, $length);
+            // $kodeBarang = $prefix . '-' . uniqid() . $randomString;
+            $kode = $prefix . '-' . substr(bin2hex(random_bytes(3)), 0, 3) . $randomString;
+            $exists = Ruangan::where('kode_ruangan', $kode)->exists();
+        } while ($exists);
+
+        return $kode;
     }
 }

@@ -25,7 +25,7 @@ class Barang extends Component
 
     public function deleteBarang($id) {
         $barang = BarangModel::find($id);
-        if (file_exists(public_path($barang->foto_barang))) {
+        if ($barang->foto_barang && file_exists(public_path($barang->foto_barang))) {
             unlink(public_path($barang->foto_barang));
         }
         $barang->delete();

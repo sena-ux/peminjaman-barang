@@ -101,6 +101,8 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
         // =================== Inventaris Ruangan =========================
         Route::get('inventaris/ruangan', [InventarisController::class, 'ruangan'])->name('inventaris.ruangan');
         Route::get('inventaris/ruangan/insert/barang', [InventarisController::class, 'insertBarang'])->name('inventaris.insertBarang');
+        Route::post('inventaris/ruangan/insert/foto_barang/{id_barang}', [InventarisController::class, 'insertFotoBarang'])->name('inventaris.insert.foto');
+        Route::get('inventaris/barang/ruangan/cetak/{kode_ruangan}/pdf', [InventarisController::class, 'cetak_kir'])->name('inventaris.cetak.pdf');
     });
 
     Route::middleware(['role:admin|superadmin'])->group(function () {

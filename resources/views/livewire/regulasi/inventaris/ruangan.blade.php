@@ -11,6 +11,7 @@
                             <th scope="col">Nama Ruangan</th>
                             <th scope="col">Kelas</th>
                             <th scope="col">Kode Ruangan</th>
+                            <th scope="col">Barang Terinput</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -21,6 +22,9 @@
                             <td class="align-middle">{{ $inventarisRuangan->nama_ruangan }}</td>
                             <td class="align-middle">{{ $inventarisRuangan->kelas->name ?? "-" }}</td>
                             <td class="align-middle">{{ $inventarisRuangan->kode_ruangan ?? "-" }}</td>
+                            <td class="align-middle">
+                                {{ $inventarisRuangan->kir->count() }}
+                            </td>
                             <td class="align-middle">
                                 {{-- @can('show inventarisRuangan')
                                 <a wire:click='show({{$inventarisRuangan->id}})' class="btn btn-info">Show</a>
@@ -37,7 +41,14 @@
                                     Barang</a>
                                 @endcan
                                 @can('cetak inventarisRuangan')
-                                <a wire:click='' class="btn btn-success">Cetas Barang</a>
+                                {{-- <a wire:click='cetak_kartu({{$inventarisRuangan->id}})' class="btn btn-success">
+                                    <div class="spinner-border" wire:loading wire:target='cetak_kartu({{$inventarisRuangan->id}})' role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    Cetak Barang
+                                </a> --}}
+                                <a href="{{route('inventaris.cetak.pdf', $inventarisRuangan->kode_ruangan)}}"
+                                    class="btn btn-success">Cetak Barang</a>
                                 @endcan
                             </td>
                         </tr>
@@ -223,7 +234,7 @@
     <div class="card card-default color-palette-box">
         <div class="d-flex p-2 rounded">
             <div class="ml-auto">
-                <a wire:click='$set("page", "index")' class="btn btn-primary">Kembali</a>
+                <a href="{{route('inventaris.ruangan')}}" class="btn btn-primary">Kembali</a>
             </div>
         </div>
     </div>
@@ -232,9 +243,41 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header text-start bg-success">
-                        <span>Create Barang For Ruangan {{$ruangan->nama_ruangan}}</span>
+                        <span>{{ $duplikat == 'create' ? "Create" :($duplikat == 'update' ? "update" : "Insert") }}
+                            Barang For Ruangan {{$ruangan->nama_ruangan}}</span>
                     </div>
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 d-flex align-content-center">
+                                @if ($duplikat == "true")
+                                <div class="alert alert-info col-md-12" role="alert">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            Barang dengan kode : <b>{{$kode_barang_search}}</b> sudah tersedia.
+                                        </div>
+                                        <div class="col-md-12 p-3">
+                                            <a wire:click='update' class="btn btn-primary">Update</a>
+                                            <a wire:click='$set("duplikat", "false")'
+                                                class="btn btn-secondary">Batal</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                                @if ($duplikat == "false")
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Masukkan Kode Barang</span>
+                                    <input type="search" wire:model.live="kode_barang_search" id="kode_barang_search"
+                                        class="form-control"
+                                        placeholder="Cari Barang yang sudah tersedia dengan kode barang...">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary" type="button" id="button-addon2"
+                                            wire:click='searchBarang' autofocus>Search Barang</button>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @if ($insertBarangPage == 'show' && ($duplikat == "update" || $duplikat == 'create'))
                         <form wire:submit.prevent='insertBarangToRuangan'>
                             <input type="hidden" name="ruangan_id" value="{{$ruangan->id}}">
                             <div class="form-row">
@@ -243,10 +286,15 @@
                                     <input type="text" wire:model="nama_barang" id="namaBarang" class="form-control"
                                         placeholder="Masukkan nama barang">
                                 </div>
-                                <div class="col-md-12 p-2 required">
+                                <div class="col-md-12 p-2">
                                     <label for="kode_barang" class="required">Kode Barang</label>
                                     <input type="text" wire:model="kode_barang" id="kode_barang" class="form-control"
                                         placeholder="Masukkan kode barang yang sesuai.">
+                                </div>
+                                <div class="col-md-12 p-2">
+                                    <label for="merk" class="required">Merk / Model</label>
+                                    <input type="text" wire:model="merk" id="merk" class="form-control"
+                                        placeholder="Masukkan ,erk barang yang sesuai...">
                                 </div>
                                 <div class="col-md-12 p-2">
                                     <label for="sumberDana" class="required">Sumber Dana</label>
@@ -283,17 +331,17 @@
                                     <label for="harga_barang">Harga Barang</label>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text">Rp.</span>
-                                        <input type="number" class="form-control" id="biaya" aria-describedby="biayaHelp"
-                                            required>
+                                        <input type="number" class="form-control" wire:model="harga_barang" id="biaya"
+                                            aria-describedby="biayaHelp" required>
                                         <span class="input-group-text">,00</span>
                                     </div>
 
-                                    <input type="hidden" id="biayaHidden" wire:model="harga_barang">
+                                    {{-- <input type="hidden" id="biayaHidden" wire:model="harga_barang"> --}}
                                 </div>
                                 <div class="col-md-12 p-2">
                                     <label for="tahun_register">Tahun Register</label>
-                                    <input type="number" wire:model="tahun_register" id="tahun_register" class="form-control"
-                                        placeholder="Masukkan tahun register barang">
+                                    <input type="number" wire:model="tahun_register" id="tahun_register"
+                                        class="form-control" placeholder="Masukkan tahun register barang">
                                 </div>
                                 <div class="col-md-12 p-2">
                                     <label for="category" class="required">Category</label>
@@ -302,8 +350,8 @@
                                 </div>
                                 <div class="col-md-12 p-2">
                                     <label for="deskripsiBarang">Deskripsi Barang</label>
-                                    <textarea wire:model="deskripsi" id="deskripsiBarang" cols="30" rows="10" wire:model="deskripsi"
-                                        class="form-control"></textarea>
+                                    <textarea wire:model="deskripsi" id="deskripsiBarang" cols="30" rows="10"
+                                        wire:model="deskripsi" class="form-control"></textarea>
                                 </div>
                                 <hr>
                                 <div class="col-md-12 p-2">
@@ -314,7 +362,7 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="addon-wrapping">Total</span>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="Username"
+                                                <input type="text" class="form-control" placeholder="Total"
                                                     aria-label="Username" aria-describedby="addon-wrapping"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     wire:model="total_barang" value="1">
@@ -325,10 +373,10 @@
                                                 <div class="input-group-prepend">
                                                     <span class="input-group-text" id="addon-wrapping">Baik</span>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="Username"
+                                                <input type="text" class="form-control" placeholder="Baik"
                                                     aria-label="Username" aria-describedby="addon-wrapping"
-                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')" wire:model="baik"
-                                                    value="1">
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    wire:model="baik" value="1">
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -337,7 +385,7 @@
                                                     <span class="input-group-text" id="addon-wrapping">Kurang
                                                         Baik</span>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="Username"
+                                                <input type="text" class="form-control" placeholder="Kurang Baik"
                                                     aria-label="Username" aria-describedby="addon-wrapping"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     wire:model="kurang_baik" value="1">
@@ -349,7 +397,7 @@
                                                     <span class="input-group-text" id="addon-wrapping">Rusak
                                                         Berat</span>
                                                 </div>
-                                                <input type="text" class="form-control" placeholder="Username"
+                                                <input type="text" class="form-control" placeholder="Rusak Berat"
                                                     aria-label="Username" aria-describedby="addon-wrapping"
                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                     wire:model="rusak_berat" value="1">
@@ -358,16 +406,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-end d-flex justify-content-end">
+                            <div class="d-flex justify-content-between">
+                                <a wire:click='clear' class="btn btn-secondary">Batal {{ $duplikat == 'create' ?
+                                    "Create" :($duplikat == 'update' ? "update" : "Insert") }}</a>
                                 <div class="d-flex align-item-center">
-                                    <div class="spinner-border text-primary mr-2" role="status" wire:loading wire:target="store">
+                                    <div class="spinner-border text-primary mr-2" role="status" wire:loading
+                                        wire:target="store">
                                         <span class="sr-only">Loading...</span>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Insert Barang For Ruangan
+                                    <button type="submit" class="btn btn-primary">{{ $duplikat == 'create' ? "Create"
+                                        :($duplikat == 'update' ? "update" : "Insert") }} Barang For Ruangan
                                         {{$ruangan->nama_ruangan}}</button>
                                 </div>
                             </div>
                         </form>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -406,11 +459,13 @@
                             </li>
                             <li>
                                 <b>Kode barang unique di miliki oleh 1 jenis barang.
-                                    Misalnya : meja semua meja bisa memiliki kode barang yang sama nanti jumlah barang yang menyesuaikan.
+                                    Misalnya : meja semua meja bisa memiliki kode barang yang sama nanti jumlah barang
+                                    yang menyesuaikan.
                                 </b>
                             </li>
                             <li>
-                                <b>Jika barang yang tidak memiliki kode baranng bisa sesuaikan dengan kode barang yang lain yang satu barang.</b>
+                                <b>Jika barang yang tidak memiliki kode baranng bisa sesuaikan dengan kode barang yang
+                                    lain yang satu barang.</b>
                             </li>
                         </ol>
                     </div>
@@ -420,17 +475,28 @@
     </div>
     @endif
 
-    @if ($page == 'insertFotoBarang')
+    @if ($page == 'insertImageForNewBarang')
     <div class="card card-default color-palette-box">
         <div class="row">
-            <form action="{{route('inventaris.insert')}}" method="post">
+            <form action="{{route('inventaris.insert.foto', $barang_id)}}" method="post" enctype="multipart/form-data">
+                @csrf
+                @method('POST')
                 <div class="col-md-12 p-2">
                     <label for="foto_barang">Foto Barang</label>
                     <input type="file" name="foto_barang" id="foto_barang" class="form-control"
                         placeholder="Upload gambar" accept="image/*" capture>
                 </div>
+                <div class="text-center col-md-12 p-3"><button type="submit" class="btn btn-primary">Add Foto</button>
+                </div>
             </form>
         </div>
     </div>
+    @if ($foto_barang)
+    <div class="card card-default color-palette-box p-1">
+        <div class="row">
+            <img src="{{asset($foto_barang)}}" alt="Foto barang" srcset="" class="img-fluid img-thumbnail">
+        </div>
+    </div>
+    @endif
     @endif
 </div>

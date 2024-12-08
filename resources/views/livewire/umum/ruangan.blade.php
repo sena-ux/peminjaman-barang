@@ -46,6 +46,7 @@
                     <th scope="col">#</th>
                     <th scope="col">Nama Ruangan</th>
                     <th scope="col">Lokasi</th>
+                    <th scope="col">Kode Ruangan</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -55,6 +56,7 @@
                     <th scope="row">{{ $key + 1 }}</th>
                     <td>{{ $ruangan->nama_ruangan }}</td>
                     <td>{{ $ruangan->lokasi }}</td>
+                    <td>{{ $ruangan->kode_ruangan }}</td>
                     <td>
                         @can('show ruangan')
                         <a wire:click='show({{$ruangan->id}})' class="btn btn-info">Show</a>

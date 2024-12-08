@@ -42,7 +42,7 @@
     class=" {{--dark-mode --}} light-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed control-sidebar-slide-open text-sm"
     style="height: auto;">
     <div class="wrapper">
-
+        @include('sweetalert::alert')
         <!-- Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
             <img class="animation__wobble" src="{{ asset('sman2amlapura.ico') }}" alt="AdminLTELogo" height="60"

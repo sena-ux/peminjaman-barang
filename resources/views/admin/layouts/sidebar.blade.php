@@ -34,7 +34,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('umum.index') }}" class="nav-link {{ Request::segment(2) == 'pengaduan' ? 'active' : '' }}">
+                    <a href="{{ route('umum.index') }}"
+                        class="nav-link {{ Request::segment(2) == 'pengaduan' ? 'active' : '' }}">
                         <i class="nav-icon fas fa-exclamation-circle"></i>
                         <p>
                             Pengaduan
@@ -43,38 +44,81 @@
                 </li>
 
                 @role('admin|petugas|staf|superadmin')
+                <li class="nav-header">Regulasi</li>
+                <li class="nav-item">
+                    <a href="{{ route('barang.index') }}"
+                        class="nav-link {{ Request::segment(2) == 'barang' && Request::segment(3) == '' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>
+                            Barang
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('inventaris.ruangan') }}"
+                        class="nav-link {{ Request::segment(2) == 'inventaris' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>
+                            Inventaris
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('kerusakan.index') }}"
-                    class="nav-link {{ Request::segment(2) == 'kerusakan' ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-exclamation-circle"></i>
+                        class="nav-link {{ Request::segment(2) == 'kerusakan' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-exclamation-circle"></i>
                         <p>
                             Kerusakan
                             {{-- <i class="fas fa-angle-left right"></i> --}}
                         </p>
                     </a>
-                    {{-- <ul class="nav nav-treeview"> --}}
-                        {{-- <li class="nav-item">
-                            <a href="{{ route('umum.index') }}"
-                                class="nav-link {{ Request::segment(2) == 'umum' ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Pengaduan Umum</p>
-                            </a>
-                        </li> --}}
-                        {{-- <li class="nav-item">
-                            <a href="" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Kebutuhan Ruangan</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('barangrk.index') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Inventory Ruangan</p>
-                            </a>
-                        </li> --}}
-                        {{--
-                    </ul> --}}
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('barangPinjam.index') }}"
+                        class="nav-link {{ Request::segment(3) == 'barangPinjam' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>
+                            Barang Pinjam
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('pemeliharaan.index') }}"
+                        class="nav-link {{ Request::segment(2) == 'regulasi' ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>
+                            Pemeliharaan
+                            {{-- <i class="fas fa-angle-left right"></i> --}}
+                        </p>
+                    </a>
+                </li>
+                {{-- Barang Habis Pakai --}}
+                {{-- Barang Alat Kerbersihan --}}
+                @endrole
+                @role('admin|petugas|staf|superadmin')
+
+                {{-- <ul class="nav nav-treeview"> --}}
+                    {{-- <li class="nav-item">
+                        <a href="{{ route('umum.index') }}"
+                            class="nav-link {{ Request::segment(2) == 'umum' ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Pengaduan Umum</p>
+                        </a>
+                    </li> --}}
+                    {{-- <li class="nav-item">
+                        <a href="" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Kebutuhan Ruangan</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('barangrk.index') }}" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Inventory Ruangan</p>
+                        </a>
+                    </li> --}}
+                    {{--
+                </ul> --}}
 
                 <li class="nav-header">Umum</li>
                 <li class="nav-item">
@@ -105,16 +149,9 @@
                         <p>Sarana</p>
                     </a>
                 </li>
-                <li class="nav-header">Management Barang</li>
-                <li class="nav-item">
-                    <a href="{{ route('barang.index') }}"
-                        class="nav-link {{ Request::segment(2) == 'barang' && Request::segment(3) == '' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                            Barang
-                        </p>
-                    </a>
-                </li>
+
+                {{-- <li class="nav-header">Management Barang</li> --}}
+
                 {{-- <li class="nav-item">
                     <a href="{{ route('inventory.index') }}"
                         class="nav-link {{ Request::segment(3) == 'inventoryBarangModel' ? 'active' : '' }}">
@@ -134,39 +171,6 @@
                         <p>Barang Kebersihan</p>
                     </a>
                 </li> --}}
-                @endrole
-                @role('admin|petugas|staf|superadmin')
-                <li class="nav-header">Regulasi</li>
-                <li class="nav-item">
-                    <a href="{{ route('pemeliharaan.index') }}"
-                        class="nav-link {{ Request::segment(2) == 'regulasi' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                            Pemeliharaan
-                            {{-- <i class="fas fa-angle-left right"></i> --}}
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('inventaris.ruangan') }}"
-                        class="nav-link {{ Request::segment(2) == 'inventaris' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                            Inventaris
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('barangPinjam.index') }}"
-                        class="nav-link {{ Request::segment(3) == 'barangPinjam' ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>
-                            Barang Pinjam
-                        </p>
-                    </a>
-                </li>
-                {{-- Barang Habis Pakai --}}
-                {{-- Barang Alat Kerbersihan --}}
                 @endrole
                 @role('superadmin|staf|admin')
                 <li class="nav-header">Master Data</li>
